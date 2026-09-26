@@ -1,0 +1,53 @@
+---
+// Questions are rendered as visible headings with answers underneath,
+// so both readers and AI assistants see them without opening anything.
+// Pair with faqSchema() in the page's jsonLd.
+interface Props {
+  title: string;
+  items: { q: string; a: string }[];
+  id?: string;
+}
+const { title, items, id = 'faq' } = Astro.props;
+---
+
+<section class="faq container section" aria-labelledby={id}>
+  <div class="section-head" data-reveal>
+    <p class="label"><span class="label--accent">FAQ</span></p>
+    <h2 id={id}>{title}</h2>
+  </div>
+  <div class="faq__list">
+    {
+      items.map((it) => (
+        <div class="faq__item" data-reveal>
+          <h3>{it.q}</h3>
+          <p>{it.a}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .faq__list {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .faq__item {
+    display: grid;
+    gap: var(--s-1);
+    padding: var(--s-3);
+    background: var(--surface);
+    border-inline-start: 3px solid var(--teal-deep);
+  }
+
+  .faq__item h3 {
+    font: 600 1.15rem/1.35 var(--body);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .faq__item p {
+    max-width: 70ch;
+  }
+</style>

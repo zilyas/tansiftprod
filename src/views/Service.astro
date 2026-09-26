@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import { services, serviceUrl, type Service } from '../data/services';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+  service: Service;
+}
+const { lang, service } = Astro.props;
+const tr = t(lang);
+const others = services.filter((s) => s.id !== service.id).slice(0, 3);
+const paths = { en: serviceUrl(service, 'en'), fr: serviceUrl(service, 'fr') };
+
+const copy = {
+  en: { includes: 'What’s included', ideal: 'Ideal for', more: 'Other services', faq: 'Questions about this service' },
+  fr: { includes: 'Ce qui est inclus', ideal: 'Idéal pour', more: 'Autres services', faq: 'Questions sur ce service' },
+}[lang];
+---
+
+<Base
+  lang={lang}
+  title={service.title[lang]}
+  description={service.description[lang]}
+  paths={paths}
+  jsonLd={[
+    serviceSchema(Astro.site, { name: service.name[lang], description: service.description[lang], path: paths[lang] }),
+    faqSchema(service.faq[lang]),
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.services'), path: routes.services[lang] },
+      { name: service.name[lang], path: paths[lang] },
+    ]),
+  ]}
+>
+  <article>
+    <header class="section container svc-hero">
+      <nav class="crumbs label" aria-label="Breadcrumb">
+        <a href={routes.home[lang]}>{tr('breadcrumb.home')}</a>
+        <span aria-hidden="true">/</span>
+        <a href={routes.services[lang]}>{tr('nav.services')}</a>
+      </nav>
+      <div class="svc-hero__grid">
+        <div class="stack">
+          <h1>{service.name[lang]}</h1>
+          <p class="lede">{service.intro[lang]}</p>
+          <div class="btn-row">
+            <a class="btn" href={`${routes.contact[lang]}?type=${service.id}`}>{tr('nav.cta')}</a>
+          </div>
+        </div>
+        <div class="frame frame--portrait">
+          <img src={service.image} alt="" width="1200" height="1500" fetchpriority="high" decoding="async" />
+        </div>
+      </div>
+    </header>
+
+    <section class="section container" aria-labelledby="includes">
+      <div class="detail-grid">
+        <div class="stack" data-reveal>
+          <p class="label label--accent">{copy.includes}</p>
+          <h2 id="includes" class="visually-hidden">{copy.includes}</h2>
+          <ul class="ticks">
+            {service.includes[lang].map((x) => <li>{x}</li>)}
+          </ul>
+        </div>
+        <div class="stack" data-reveal>
+          <p class="label label--accent">{copy.ideal}</p>
+          <ul class="ideal">
+            {service.idealFor[lang].map((x) => <li>{x}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <Faq title={copy.faq} items={service.faq[lang]} />
+  </article>
+
+  <section class="section container" aria-labelledby="more">
+    <div class="section-head">
+      <p class="label"><span class="label--accent">{tr('nav.services')}</span></p>
+      <h2 id="more">{copy.more}</h2>
+    </div>
+    <div class="cards">
+      {others.map((s) => <ServiceCard service={s} lang={lang} />)}
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .svc-hero {
+    display: grid;
+    gap: var(--s-4);
+    padding-block-start: var(--s-5);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .crumbs a:hover {
+    color: var(--ink);
+  }
+
+  .svc-hero__grid {
+    display: grid;
+    gap: var(--s-4);
+    align-items: center;
+  }
+
+  .svc-hero__grid h1 {
+    font-size: clamp(2.6rem, 8vw, 6rem);
+  }
+
+  @media (min-width: 860px) {
+    .svc-hero__grid {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--s-6);
+    }
+  }
+
+  .detail-grid {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 820px) {
+    .detail-grid {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  .ticks,
+  .ideal {
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+
+  .ticks li,
+  .ideal li {
+    padding-block: 0.85rem;
+    border-block-end: 1px solid var(--line);
+    padding-inline-start: 1.6rem;
+    position: relative;
+  }
+
+  .ticks li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 1.35rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    background: var(--accent);
+  }
+
+  .ideal li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 1.35rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    border: 2px solid var(--teal);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--s-3);
+  }
+</style>

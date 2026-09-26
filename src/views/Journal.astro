@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { articles, articleUrl } from '../data/journal';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const copy = {
+  en: {
+    title: 'Journal | Guides to Filming and Photography in Essaouira | Tansift',
+    description: 'Practical guides from a crew based in Essaouira: permits, drones, light, wind and locations for filming and photo shoots.',
+    h1: 'Journal',
+    lede: 'Practical notes from a crew that shoots in Essaouira every week.',
+  },
+  fr: {
+    title: 'Journal | Guides pour filmer et photographier à Essaouira | Tansift',
+    description: 'Guides pratiques d’une équipe basée à Essaouira : autorisations, drones, lumière, vent et lieux pour tournages et shootings photo.',
+    h1: 'Journal',
+    lede: 'Notes pratiques d’une équipe qui tourne à Essaouira chaque semaine.',
+  },
+}[lang];
+
+const fmt = new Intl.DateTimeFormat(lang, { dateStyle: 'long' });
+---
+
+<Base
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+  paths={routes.journal}
+  jsonLd={[
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.journal'), path: routes.journal[lang] },
+    ]),
+  ]}
+>
+  <section class="section container">
+    <SectionHead eyebrow="Field notes" title={copy.h1} level="h1">
+      <p class="lede muted">{copy.lede}</p>
+    </SectionHead>
+
+    <ul class="posts">
+      {
+        articles.map((a) => (
+          <li data-reveal>
+            <article class="post">
+              <p class="label">
+                <time datetime={a.published}>{fmt.format(new Date(a.published))}</time>
+              </p>
+              <h2>
+                <a href={articleUrl(a, lang)}>{a.title[lang]}</a>
+              </h2>
+              <p class="muted">{a.description[lang]}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .posts {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    border-block-start: 1px solid var(--line);
+  }
+
+  .post {
+    position: relative;
+    display: grid;
+    gap: var(--s-1);
+    padding-block: var(--s-4);
+    border-block-end: 1px solid var(--line);
+  }
+
+  .post h2 {
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    max-width: 28ch;
+  }
+
+  .post h2 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .post h2 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .post:hover h2 a {
+    color: var(--accent);
+  }
+</style>

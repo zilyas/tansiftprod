@@ -1,0 +1,370 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { articles, articleUrl } from '../data/journal';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema, faqSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const copy = {
+  en: {
+    title: 'Filming in Essaouira | Local Crew & Production Services | Tansift',
+    description:
+      'Planning a shoot in Essaouira? Tansift is a local production crew offering camera and sound crew, fixers, location scouting, drone and permit preparation.',
+    eyebrow: 'For productions and agencies',
+    h1: 'Filming in Essaouira',
+    lede: 'Tansift is a production crew based in Essaouira. We help agencies, brands and film crews from abroad shoot here: we find locations, plan around the light and the wind, prepare permits with you and provide the local team.',
+    provideLabel: 'What we provide',
+    provideTitle: 'Everything a visiting crew needs',
+    provide: [
+      { k: 'Local crew', v: 'Camera, sound, lighting, production assistants and drivers who know the city.' },
+      { k: 'Fixing & logistics', v: 'Location access, accommodation, transport, catering and translation (French, English, Darija, Arabic).' },
+      { k: 'Location scouting', v: 'Photo and video recces with the best hour for each place.' },
+      { k: 'Permits', v: 'We prepare the filming permit and drone authorisation files with you, well ahead of the shoot.' },
+      { k: 'Drone', v: 'Aerial filming once authorised, flown in the calm morning hours.' },
+      { k: 'Post-production', v: 'Editing, grading and subtitles if you want delivery from Essaouira.' },
+    ],
+    locLabel: 'Location notes',
+    locTitle: 'Eight places we shoot, and when',
+    locations: [
+      { name: 'Skala de la Ville', note: 'Ramparts with bronze cannons facing the Atlantic. Late afternoon.' },
+      { name: 'Skala du Port', note: 'Harbour walls and the blue fishing boats. Early morning, when the port is busy.' },
+      { name: 'The medina', note: 'White and blue streets, souks and doors. Morning, before the crowds.' },
+      { name: 'The Mellah', note: 'Old Jewish quarter with worn façades and quiet lanes. Soft midday shade.' },
+      { name: 'Essaouira beach', note: 'Long sandy bay with kitesurfers in wind season. Wide shots at sunset.' },
+      { name: 'Diabat dunes', note: 'Dunes and scrub south of the bay. Golden hour.' },
+      { name: 'Sidi Kaouki', note: 'Surf village and open coastline south of the city. Morning, before the wind.' },
+      { name: 'Argan countryside', note: 'Argan trees, farms and villages inland toward Ghazoua. Early morning light.' },
+    ],
+    screenLabel: 'Essaouira on screen',
+    screenTitle: 'A city that has played many roles',
+    screen:
+      'Orson Welles filmed parts of Othello on Essaouira’s ramparts, a film that won the top prize at Cannes in 1952. The city later played Astapor in season 3 of Game of Thrones. Its 18th-century walls, laid out in 1760 and listed by UNESCO in 2001, still draw international productions.',
+    windLabel: 'Shooting calendar',
+    windTitle: 'Wind by month',
+    windNote: 'The trade wind (alizé) usually builds from early afternoon. Plan sound and drone work for the morning.',
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    legend: ['Calmer', 'Building', 'Strongest'],
+    guides: 'Planning guides',
+    faq: [
+      {
+        q: 'Do I need a permit to film in Essaouira?',
+        a: 'Yes. Any professional shoot in Morocco needs a filming permit from the Centre Cinématographique Marocain (CCM). Foreign productions apply through a licensed Moroccan production company. Allow at least two weeks, and more if a drone is involved.',
+      },
+      {
+        q: 'Can you fly a drone in Essaouira?',
+        a: 'Only with authorisation. Morocco has banned unauthorised civilian drones since 2015. Professional aerial filming needs a CCM filming permit plus a regional drone authorisation, which takes at least about 10 working days.',
+      },
+      {
+        q: 'What is the best time of day to film in Essaouira?',
+        a: 'Early morning. The trade wind usually builds from early afternoon, reaching roughly 18 to 28 knots in summer. Shoot dialogue and aerials before noon, and keep late afternoon for wide golden-hour shots on the ramparts.',
+      },
+      {
+        q: 'Does Morocco offer a film rebate?',
+        a: 'Yes. Morocco offers a 30% uncapped cash rebate on eligible local spend for productions spending at least 10 million MAD with 18 or more shooting days in the country.',
+      },
+    ],
+  },
+  fr: {
+    title: 'Tourner à Essaouira | Équipe locale et services de production | Tansift',
+    description:
+      'Un tournage à Essaouira ? Tansift est une équipe de production locale : équipe caméra et son, fixeurs, repérages, drone et préparation des autorisations.',
+    eyebrow: 'Pour les productions et les agences',
+    h1: 'Tourner à Essaouira',
+    lede: 'Tansift est une équipe de production basée à Essaouira. Nous aidons agences, marques et équipes étrangères à tourner ici : repérages, planning selon la lumière et le vent, préparation des autorisations avec vous et équipe locale.',
+    provideLabel: 'Ce que nous apportons',
+    provideTitle: 'Tout ce qu’il faut à une équipe sur place',
+    provide: [
+      { k: 'Équipe locale', v: 'Caméra, son, lumière, assistants de production et chauffeurs qui connaissent la ville.' },
+      { k: 'Fixing et logistique', v: 'Accès aux lieux, hébergement, transport, catering et traduction (français, anglais, darija, arabe).' },
+      { k: 'Repérages', v: 'Repérages photo et vidéo avec la meilleure heure pour chaque lieu.' },
+      { k: 'Autorisations', v: 'Nous préparons avec vous les dossiers d’autorisation de tournage et de drone, bien avant le tournage.' },
+      { k: 'Drone', v: 'Prises aériennes une fois autorisées, aux heures calmes du matin.' },
+      { k: 'Postproduction', v: 'Montage, étalonnage et sous-titres si vous souhaitez une livraison depuis Essaouira.' },
+    ],
+    locLabel: 'Carnet de lieux',
+    locTitle: 'Huit lieux où nous tournons, et quand',
+    locations: [
+      { name: 'Skala de la Ville', note: 'Remparts et canons de bronze face à l’Atlantique. Fin d’après-midi.' },
+      { name: 'Skala du Port', note: 'Murs du port et barques bleues. Tôt le matin, quand le port s’anime.' },
+      { name: 'La médina', note: 'Ruelles blanches et bleues, souks et portes. Le matin, avant la foule.' },
+      { name: 'Le Mellah', note: 'Ancien quartier juif, façades patinées et ruelles calmes. Ombre douce à midi.' },
+      { name: 'La plage d’Essaouira', note: 'Grande baie de sable, kitesurfeurs en saison de vent. Plans larges au coucher du soleil.' },
+      { name: 'Les dunes de Diabat', note: 'Dunes et broussailles au sud de la baie. Heure dorée.' },
+      { name: 'Sidi Kaouki', note: 'Village de surf et côte sauvage au sud de la ville. Le matin, avant le vent.' },
+      { name: 'La campagne de l’arganier', note: 'Arganiers, fermes et villages vers Ghazoua. Lumière du petit matin.' },
+    ],
+    screenLabel: 'Essaouira à l’écran',
+    screenTitle: 'Une ville aux mille rôles',
+    screen:
+      'Orson Welles a tourné une partie d’Othello sur les remparts d’Essaouira, film récompensé par le grand prix du Festival de Cannes en 1952. La ville a ensuite incarné Astapor dans la saison 3 de Game of Thrones. Ses remparts du XVIIIe siècle, tracés en 1760 et inscrits au patrimoine mondial de l’UNESCO en 2001, attirent toujours les productions internationales.',
+    windLabel: 'Calendrier de tournage',
+    windTitle: 'Le vent mois par mois',
+    windNote: 'L’alizé se lève en général en début d’après-midi. Prévoyez le son et le drone le matin.',
+    months: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+    legend: ['Plus calme', 'En hausse', 'Le plus fort'],
+    guides: 'Guides pratiques',
+    faq: [
+      {
+        q: 'Faut-il une autorisation pour tourner à Essaouira ?',
+        a: 'Oui. Tout tournage professionnel au Maroc nécessite une autorisation du Centre Cinématographique Marocain (CCM). Les productions étrangères passent par une société de production marocaine agréée. Comptez au moins deux semaines, davantage avec un drone.',
+      },
+      {
+        q: 'Peut-on faire voler un drone à Essaouira ?',
+        a: 'Seulement avec une autorisation. Le Maroc interdit les drones civils non autorisés depuis 2015. Le tournage aérien professionnel exige une autorisation du CCM et une autorisation drone régionale, qui prend au moins une dizaine de jours ouvrés.',
+      },
+      {
+        q: 'Quel est le meilleur moment de la journée pour tourner à Essaouira ?',
+        a: 'Tôt le matin. L’alizé se lève en général en début d’après-midi et atteint environ 18 à 28 nœuds en été. Tournez les dialogues et les plans aériens avant midi, et gardez la fin d’après-midi pour les plans larges de l’heure dorée sur les remparts.',
+      },
+      {
+        q: 'Le Maroc propose-t-il un crédit d’impôt ou remboursement pour les tournages ?',
+        a: 'Oui. Le Maroc propose un remboursement de 30 % sans plafond sur les dépenses locales éligibles, pour les productions dépensant au moins 10 millions de dirhams avec 18 jours de tournage ou plus dans le pays.',
+      },
+    ],
+  },
+}[lang];
+
+// Rough wind strength by month (0 calmer, 1 building, 2 strongest), from local kitesurf guides.
+const wind = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0];
+---
+
+<Base
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+  paths={routes.shoot}
+  jsonLd={[
+    faqSchema(copy.faq),
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.shoot'), path: routes.shoot[lang] },
+    ]),
+  ]}
+>
+  <section class="section container">
+    <SectionHead eyebrow={copy.eyebrow} kicker="31.51° N · 9.77° W" title={copy.h1} level="h1">
+      <p class="lede">{copy.lede}</p>
+      <div class="btn-row">
+        <a class="btn" href={`${routes.contact[lang]}?type=production`}>{tr('nav.cta')}</a>
+      </div>
+    </SectionHead>
+  </section>
+
+  <section class="section container" aria-labelledby="provide">
+    <SectionHead eyebrow={copy.provideLabel} title={copy.provideTitle} id="provide" />
+    <dl class="provide">
+      {
+        copy.provide.map((p) => (
+          <div data-reveal>
+            <dt>{p.k}</dt>
+            <dd class="muted">{p.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section container" aria-labelledby="locations">
+    <SectionHead eyebrow={copy.locLabel} title={copy.locTitle} id="locations" />
+    <ol class="locs">
+      {
+        copy.locations.map((l, i) => (
+          <li data-reveal>
+            <span class="label label--accent">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{l.name}</h3>
+            <p class="muted">{l.note}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section container" aria-labelledby="wind">
+    <SectionHead eyebrow={copy.windLabel} title={copy.windTitle} id="wind">
+      <p class="muted">{copy.windNote}</p>
+    </SectionHead>
+    <div>
+      <ol class="wind" aria-label={copy.windTitle}>
+        {
+          copy.months.map((m, i) => (
+            <li class={`w${wind[i]}`}>
+              <span>{m}</span>
+              <span class="visually-hidden">: {copy.legend[wind[i]]}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <p class="legend label">
+      {copy.legend.map((l, i) => <span><i class={`w${i}`} aria-hidden="true"></i>{l}</span>)}
+    </p>
+  </section>
+
+  <section class="section container" aria-labelledby="screen">
+    <div class="screen" data-reveal>
+      <p class="label label--accent">{copy.screenLabel}</p>
+      <h2 id="screen">{copy.screenTitle}</h2>
+      <p class="lede">{copy.screen}</p>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="guides">
+    <SectionHead eyebrow={tr('nav.journal')} title={copy.guides} id="guides" />
+    <ul class="guides">
+      {
+        articles.map((a) => (
+          <li data-reveal>
+            <a href={articleUrl(a, lang)}>
+              <span class="h3">{a.title[lang]}</span>
+              <span class="muted">{a.description[lang]}</span>
+              <span class="text-link">→ {tr('readMore')}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <Faq title={tr('faq.title')} items={copy.faq} />
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .provide {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--s-4) var(--s-3);
+  }
+
+  .provide div {
+    border-block-start: 3px solid var(--teal-deep);
+    padding-block-start: var(--s-2);
+    display: grid;
+    gap: var(--s-1);
+  }
+
+  .provide dt {
+    font: 700 1.5rem/1.05 var(--display);
+    text-transform: uppercase;
+  }
+
+  .provide dd {
+    margin: 0;
+  }
+
+  .locs {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .locs li {
+    background: var(--bg);
+    padding: var(--s-3);
+    display: grid;
+    gap: var(--s-1);
+    align-content: start;
+  }
+
+  .wind {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 3px;
+  }
+
+  @media (min-width: 640px) {
+    .wind {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+
+  .wind li {
+    position: relative;
+    padding: 1.4rem 0.2rem;
+    text-align: center;
+    font: 400 0.75rem/1 var(--mono);
+  }
+
+  .w0 {
+    background: var(--surface-2);
+  }
+
+  .w1 {
+    background: color-mix(in srgb, var(--teal-deep) 45%, var(--surface-2));
+  }
+
+  .w2 {
+    background: var(--teal-deep);
+    color: #f5e6c8;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-block-start: var(--s-2);
+  }
+
+  .legend span {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .legend i {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+  }
+
+  .screen {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    background: var(--surface);
+    border-inline-start: 4px solid var(--accent);
+  }
+
+  .guides {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--s-3);
+  }
+
+  .guides a {
+    display: grid;
+    gap: var(--s-1);
+    height: 100%;
+    padding: var(--s-3);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .guides a:hover .h3 {
+    color: var(--accent);
+  }
+
+  .h3 {
+    font: 600 1.45rem/1.05 var(--display);
+    text-transform: uppercase;
+  }
+</style>

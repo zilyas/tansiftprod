@@ -1,0 +1,68 @@
+---
+import type { Project } from '../data/projects';
+import { categories } from '../data/projects';
+import type { Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+const { project, lang } = Astro.props;
+const tr = t(lang);
+const cat = categories.find((c) => c.id === project.category)?.label[lang];
+---
+
+<article class="project-card" data-category={project.category} data-reveal>
+  <div class="frame frame--portrait">
+    <img src={project.cover} alt={project.title[lang]} width="1200" height="1500" loading="lazy" decoding="async" />
+    <span class="frame__tag">{project.place}</span>
+    {project.sample && <span class="sample-badge">{tr('media.sample')}</span>}
+  </div>
+  <div class="project-card__body">
+    <p class="label">{cat}</p>
+    <h3>
+      {project.link ? <a href={project.link} target="_blank" rel="noopener">{project.title[lang]}</a> : project.title[lang]}
+    </h3>
+    <p class="muted">{project.summary[lang]}</p>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    position: relative;
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  .project-card__body {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .project-card h3 {
+    font-size: 1.45rem;
+  }
+
+  .project-card h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .project-card h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .project-card img {
+    transition: transform 0.5s var(--ease);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .project-card:hover img {
+      transform: scale(1.03);
+    }
+  }
+</style>

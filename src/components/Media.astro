@@ -1,0 +1,35 @@
+---
+import type { Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  ratio?: 'scope' | 'wide' | 'portrait';
+  tag?: string;
+  sample?: boolean;
+  lang: Lang;
+  eager?: boolean;
+  sizes?: string;
+}
+
+const { src, alt, width, height, ratio = 'wide', tag, sample, lang, eager = false, sizes } = Astro.props;
+const tr = t(lang);
+---
+
+<figure class={`frame frame--${ratio}`}>
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={eager ? 'high' : undefined}
+    sizes={sizes}
+  />
+  {tag && <figcaption class="frame__tag">{tag}</figcaption>}
+  {sample && <span class="sample-badge">{tr('media.sample')}</span>}
+</figure>

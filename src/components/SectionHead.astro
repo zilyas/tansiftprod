@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow: string;
+  kicker?: string;
+  title: string;
+  id?: string;
+  level?: 'h1' | 'h2';
+}
+const { eyebrow, kicker, title, id, level = 'h2' } = Astro.props;
+const Tag = level;
+---
+
+<div class="section-head" data-reveal>
+  <p class="label"><span class="label--accent">{eyebrow}</span>{kicker && <span>{kicker}</span>}</p>
+  <Tag id={id}>{title}</Tag>
+  <slot />
+</div>

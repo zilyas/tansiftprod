@@ -1,0 +1,126 @@
+---
+import { site } from '../data/site';
+import { services, serviceUrl } from '../data/services';
+import { path, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const tr = t(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="strip" aria-hidden="true"></div>
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__word">Tansift</p>
+      <p>{tr('footer.tagline')}</p>
+      <p class="muted">{tr('footer.based')}</p>
+      <a class="btn" href={path('contact', lang)}>{tr('cta.brief')}</a>
+    </div>
+
+    <nav class="site-footer__col" aria-label={tr('nav.services')}>
+      <p class="label">{tr('nav.services')}</p>
+      <ul>
+        {services.map((s) => <li><a href={serviceUrl(s, lang)}>{s.name[lang]}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav class="site-footer__col" aria-label="Tansift">
+      <p class="label">Tansift</p>
+      <ul>
+        <li><a href={path('work', lang)}>{tr('nav.work')}</a></li>
+        <li><a href={path('shoot', lang)}>{tr('nav.shoot')}</a></li>
+        <li><a href={path('studio', lang)}>{tr('nav.studio')}</a></li>
+        <li><a href={path('journal', lang)}>{tr('nav.journal')}</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-footer__col">
+      <p class="label">{tr('footer.follow')}</p>
+      <ul>
+        <li><a href={site.instagram} rel="me noopener" target="_blank">Instagram {site.instagramHandle}</a></li>
+        <li><a href={site.portfolio} rel="noopener" target="_blank">{tr('footer.archive')}</a></li>
+        {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
+        {site.phone && <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>}
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__base">
+    <p class="label">© {year} {site.name} · Essaouira · 31.51° N 9.77° W</p>
+    <p class="label">{tr('footer.rights')}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-block-start: var(--s-7);
+    padding-block-end: calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: var(--s-5) var(--s-4);
+    padding-block: var(--s-6) var(--s-5);
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+    grid-column: span 2;
+  }
+
+  @media (max-width: 640px) {
+    .site-footer__brand {
+      grid-column: auto;
+    }
+  }
+
+  .site-footer__brand .btn {
+    justify-self: start;
+  }
+
+  .site-footer__word {
+    font: 700 clamp(3rem, 8vw, 5rem)/0.85 var(--display);
+    text-transform: uppercase;
+  }
+
+  .site-footer__col {
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  .site-footer__col ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+
+  .site-footer__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .site-footer__col a:hover {
+    color: var(--accent);
+  }
+
+  .site-footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-2);
+    padding-block-start: var(--s-3);
+    border-block-start: 1px solid var(--line);
+  }
+</style>
