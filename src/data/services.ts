@@ -1,5 +1,5 @@
 import type { Lang } from '../i18n/routes';
-import { placeholder } from './media';
+import { categoryImage } from './media';
 
 type L<T = string> = Record<Lang, T>;
 
@@ -83,7 +83,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('social'),
+    image: categoryImage.social,
   },
   {
     id: 'podcast',
@@ -139,7 +139,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('podcast'),
+    image: categoryImage.podcast,
   },
   {
     id: 'photo',
@@ -195,7 +195,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('photo'),
+    image: categoryImage.photo,
   },
   {
     id: 'brand',
@@ -251,7 +251,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('brand'),
+    image: categoryImage.brand,
   },
   {
     id: 'weddings',
@@ -307,7 +307,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('weddings'),
+    image: categoryImage.weddings,
   },
   {
     id: 'drone',
@@ -363,7 +363,7 @@ export const services: Service[] = [
         },
       ],
     },
-    image: placeholder('drone'),
+    image: categoryImage.drone,
   },
 ];
 

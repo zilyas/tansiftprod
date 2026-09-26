@@ -109,9 +109,16 @@ const schemas = [org, ...jsonLd];
     <Footer lang={lang} />
 
     <script>
-      // Reveal sections as they scroll into view. Content is fully visible
-      // without JavaScript and for visitors who prefer reduced motion.
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Reveal blocks as they scroll into view, with a small stagger between
+      // siblings. Content is fully visible without JavaScript.
       const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      items.forEach((el) => {
+        const sibs = el.parentElement ? [...el.parentElement.children].filter((c) => c.hasAttribute('data-reveal')) : [];
+        const i = sibs.indexOf(el);
+        if (i > 0) el.style.setProperty('--d', `${Math.min(i * 70, 350)}ms`);
+      });
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(
           (entries) => {
@@ -129,6 +136,29 @@ const schemas = [org, ...jsonLd];
         setTimeout(() => items.forEach((el) => el.classList.add('is-in')), 2500);
       } else {
         items.forEach((el) => el.classList.add('is-in'));
+      }
+
+      // Subtle parallax on images marked data-parallax (never on text).
+      const layers = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
+      if (layers.length && !reduce) {
+        let queued = false;
+        const tick = () => {
+          const vh = innerHeight;
+          for (const el of layers) {
+            const r = el.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > vh) continue;
+            const progress = (r.top + r.height / 2 - vh / 2) / vh; // -0.5 … 0.5 around centre
+            el.style.setProperty('--py', `${(-progress * r.height * 0.1).toFixed(1)}px`);
+          }
+          queued = false;
+        };
+        addEventListener('scroll', () => {
+          if (!queued) {
+            queued = true;
+            requestAnimationFrame(tick);
+          }
+        }, { passive: true });
+        tick();
       }
     </script>
   </body>

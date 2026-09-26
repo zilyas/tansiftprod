@@ -149,6 +149,7 @@ const featured = visibleProjects.slice(0, 4);
           ratio="portrait"
           tag="Skala du Port · 07:10"
           sample={chapterMedia.problem.placeholder}
+          parallax
         />
       </div>
     </div>
@@ -157,6 +158,19 @@ const featured = visibleProjects.slice(0, 4);
   <!-- Chapter 2 -->
   <section class="section container" aria-labelledby="ch2">
     <SectionHead eyebrow={copy.ch2Label} title={copy.ch2Title} id="ch2" />
+    <div class="journey-frame" data-reveal>
+      <Media
+        lang={lang}
+        src={chapterMedia.journey.src}
+        alt={chapterMedia.journey.alt[lang]}
+        width={chapterMedia.journey.width}
+        height={chapterMedia.journey.height}
+        ratio="scope"
+        tag={lang === 'en' ? 'Beach · 06:45 · before the wind' : 'Plage · 06 h 45 · avant le vent'}
+        sample={chapterMedia.journey.placeholder}
+        parallax
+      />
+    </div>
     <ol class="steps">
       {
         copy.steps.map((s, i) => (
@@ -229,6 +243,16 @@ const featured = visibleProjects.slice(0, 4);
   @media (min-width: 860px) {
     .split {
       grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+
+  .journey-frame {
+    margin-block-end: var(--s-4);
+  }
+
+  @media (max-width: 600px) {
+    .journey-frame :global(.frame--scope) {
+      aspect-ratio: 16 / 9;
     }
   }
 

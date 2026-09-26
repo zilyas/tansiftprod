@@ -348,20 +348,41 @@ a:hover {
   opacity: 0.85;
 }
 
-/* ---------- Reveal on scroll (JS adds .js to <html>) ---------- */
+/* ---------- Motion (JS adds .js to <html>) ----------
+   Presets from UI UX Pro Max, motion 6: fade-up 8–16px over 300–450ms,
+   small stagger between siblings, images settle from a slight zoom,
+   subtle parallax on images only. All of it is off for reduced motion. */
 
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] {
     opacity: 0;
     transform: translateY(14px);
     transition:
-      opacity 0.45s var(--ease),
-      transform 0.45s var(--ease);
+      opacity 0.45s var(--ease) var(--d, 0ms),
+      transform 0.45s var(--ease) var(--d, 0ms);
   }
 
   .js [data-reveal].is-in {
     opacity: 1;
     transform: none;
+  }
+
+  /* Images inside revealed blocks settle from a slow zoom, like a push-in. */
+  .js [data-reveal] .frame img,
+  .js [data-reveal].frame img {
+    transform: scale(1.08);
+    transition: transform 1.4s var(--ease) var(--d, 0ms);
+  }
+
+  .js [data-reveal].is-in .frame img,
+  .js [data-reveal].is-in.frame img {
+    transform: scale(1);
+  }
+
+  /* Parallax layer: the image is scaled up slightly so edges never show. */
+  [data-parallax] img {
+    transform: translate3d(0, var(--py, 0px), 0) scale(1.14) !important;
+    transition: none !important;
   }
 }
 

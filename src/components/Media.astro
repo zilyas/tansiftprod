@@ -13,13 +13,14 @@ interface Props {
   lang: Lang;
   eager?: boolean;
   sizes?: string;
+  parallax?: boolean;
 }
 
-const { src, alt, width, height, ratio = 'wide', tag, sample, lang, eager = false, sizes } = Astro.props;
+const { src, alt, width, height, ratio = 'wide', tag, sample, lang, eager = false, sizes, parallax = false } = Astro.props;
 const tr = t(lang);
 ---
 
-<figure class={`frame frame--${ratio}`}>
+<figure class={`frame frame--${ratio}`} data-parallax={parallax ? '' : undefined}>
   <img
     src={src}
     alt={alt}

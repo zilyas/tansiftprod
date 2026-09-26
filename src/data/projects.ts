@@ -1,5 +1,5 @@
 import type { Lang } from '../i18n/routes';
-import { placeholder } from './media';
+import { categoryImage, preview } from './media';
 
 type L<T = string> = Record<Lang, T>;
 
@@ -57,7 +57,7 @@ export const projects: Project[] = [
       en: 'A month of Reels and photos from one shoot day.',
       fr: 'Un mois de Reels et de photos en une journée de tournage.',
     },
-    cover: placeholder('social'),
+    cover: categoryImage.social,
     year: '2026',
     story: {
       brief: {
@@ -79,7 +79,7 @@ export const projects: Project[] = [
       credits: [
         { role: { en: 'Direction', fr: 'Réalisation' }, name: 'Tansift Production' },
       ],
-      gallery: [placeholder('journey'), placeholder('problem')],
+      gallery: [preview('gallery-door-wide'), preview('gallery-port-wide')],
     },
     sample: true,
   },
@@ -93,7 +93,7 @@ export const projects: Project[] = [
       en: 'Three-camera video podcast with vertical clips.',
       fr: 'Podcast vidéo à trois caméras avec extraits verticaux.',
     },
-    cover: placeholder('podcast'),
+    cover: categoryImage.podcast,
     sample: true,
   },
   {
@@ -106,7 +106,7 @@ export const projects: Project[] = [
       en: 'Product and lifestyle photography around the port.',
       fr: 'Photographie produit et lifestyle autour du port.',
     },
-    cover: placeholder('photo'),
+    cover: categoryImage.photo,
     sample: true,
   },
   {
@@ -119,7 +119,7 @@ export const projects: Project[] = [
       en: 'A brand film following an artisan from raw material to finished piece.',
       fr: 'Un film de marque qui suit un artisan de la matière brute à la pièce finie.',
     },
-    cover: placeholder('brand'),
+    cover: categoryImage.brand,
     sample: true,
   },
   {
@@ -132,7 +132,7 @@ export const projects: Project[] = [
       en: 'Highlight film and photos of an intimate ceremony.',
       fr: 'Film court et photos d’une cérémonie intime.',
     },
-    cover: placeholder('weddings'),
+    cover: categoryImage.weddings,
     sample: true,
   },
   {
@@ -145,7 +145,7 @@ export const projects: Project[] = [
       en: 'Surf school campaign shot before the afternoon wind.',
       fr: 'Campagne pour une école de surf, tournée avant le vent de l’après-midi.',
     },
-    cover: placeholder('drone'),
+    cover: categoryImage.drone,
     sample: true,
   },
 ];
