@@ -2,9 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// TODO: replace with the final domain before launch. Canonical URLs,
-// hreflang links, the sitemap and structured data are all built from it.
-export const SITE_URL = 'https://www.tansiftproduction.com';
+// The public domain, set at build time with the SITE_URL environment
+// variable (in Coolify: a build variable). Canonical URLs, hreflang links,
+// the sitemap, robots.txt, llms.txt and structured data are built from it.
+export const SITE_URL = (process.env.SITE_URL || 'https://www.tansiftproduction.com').replace(/\/+$/, '');
 
 export default defineConfig({
   site: SITE_URL,

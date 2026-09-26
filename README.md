@@ -14,7 +14,7 @@ npm run preview  # serve the build
 npm run check    # type and template checks
 ```
 
-The `dist/` folder can be deployed to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages).
+**Deploy:** the repo includes a `Dockerfile` for Coolify (nginx on port 8080). Step-by-step guide: [docs/DEPLOY-COOLIFY.md](docs/DEPLOY-COOLIFY.md). The `dist/` folder also works on any static host.
 
 ## Where things live
 
@@ -29,14 +29,15 @@ The `dist/` folder can be deployed to any static host (Netlify, Vercel, Cloudfla
 | `src/views/` | One file per page type, used by both languages |
 | `src/pages/` | URL routes (`/` English, `/fr/` French) |
 | `src/styles/global.css` | Design tokens from Blueprint v2 (film-stock palette, Barlow Condensed / Barlow / JetBrains Mono) |
-| `public/robots.txt`, `public/llms.txt` | Crawler rules and the AI summary file |
+| `src/pages/robots.txt.ts`, `src/pages/llms.txt.ts` | Crawler rules and the AI summary file, generated with the site's domain |
+| `Dockerfile`, `deploy/nginx.conf` | Production image for Coolify |
 
 ## Before launch
 
 - [ ] Add real images and videos from the portfolio (see [docs/MEDIA.md](docs/MEDIA.md))
 - [ ] Replace the sample projects in `src/data/projects.ts`
 - [ ] Fill in `whatsapp`, `email`, `phone`, `streetAddress` and `foundingYear` in `src/data/site.ts`
-- [ ] Set the real domain in `astro.config.mjs`, `public/robots.txt` and `public/llms.txt`
+- [ ] Set the real domain as the `SITE_URL` build variable in Coolify
 - [ ] Confirm the story behind the name on the Studio page (`src/views/Studio.astro`)
 - [ ] Add crew names and roles in `src/views/Studio.astro`
 - [ ] Confirm whether Tansift holds a Moroccan production licence, and adjust the permit wording on the Shoot in Essaouira page
