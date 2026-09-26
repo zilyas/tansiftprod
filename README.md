@@ -22,7 +22,8 @@ npm run check    # type and template checks
 |------|---------------|
 | `src/data/site.ts` | Contact details, Instagram, portfolio link. **Fill in WhatsApp, email and address here.** |
 | `src/data/services.ts` | The six services with their EN/FR copy, FAQ and SEO titles |
-| `src/data/projects.ts` | Work grid entries (currently samples, see below) |
+| `src/data/projects.ts` | Work grid and case studies (currently samples; a project gets its own page when its `story` is filled in) |
+| `src/data/proof.ts` | Client logos and testimonials (sections appear once filled in) |
 | `src/data/journal.ts` | Journal guides (permits, light and wind) with sources |
 | `src/data/media.ts` | Every image and video slot on the site |
 | `src/i18n/` | Page routes per language and shared interface text |
@@ -35,7 +36,8 @@ npm run check    # type and template checks
 ## Before launch
 
 - [ ] Add real images and videos from the portfolio (see [docs/MEDIA.md](docs/MEDIA.md))
-- [ ] Replace the sample projects in `src/data/projects.ts`
+- [ ] Replace the sample projects in `src/data/projects.ts` (or build with `PUBLIC_SHOW_SAMPLES=false` to hide them)
+- [ ] Add testimonials and client logos in `src/data/proof.ts`
 - [ ] Fill in `whatsapp`, `email`, `phone`, `streetAddress` and `foundingYear` in `src/data/site.ts`
 - [ ] Set the real domain as the `SITE_URL` build variable in Coolify
 - [ ] Confirm the story behind the name on the Studio page (`src/views/Studio.astro`)

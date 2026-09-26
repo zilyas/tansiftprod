@@ -125,6 +125,8 @@ const schemas = [org, ...jsonLd];
           { rootMargin: '0px 0px -8% 0px' },
         );
         items.forEach((el) => io.observe(el));
+        // Safety net: never leave content hidden if the observer is slow.
+        setTimeout(() => items.forEach((el) => el.classList.add('is-in')), 2500);
       } else {
         items.forEach((el) => el.classList.add('is-in'));
       }

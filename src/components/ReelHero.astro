@@ -17,9 +17,11 @@ const { video, poster, fullReelUrl } = heroReel;
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="container hero__inner">
-    <div class="hero__text">
+    <div class="hero__title">
       <p class="label label--accent">{eyebrow}</p>
       <h1 id="hero-title">{title}</h1>
+    </div>
+    <div class="hero__body">
       <p class="lede">{lede}</p>
       <div class="btn-row">
         <a class="btn" href={path('contact', lang)}>{tr('nav.cta')}</a>
@@ -92,18 +94,57 @@ const { video, poster, fullReelUrl } = heroReel;
     gap: var(--s-5);
   }
 
+  /* Phones: title, then the reel, then the pitch, so the work is in the
+     first screen. Wide screens: title and pitch side by side above the reel. */
   .hero__inner {
     display: grid;
     gap: var(--s-4);
+    grid-template-areas:
+      'title'
+      'frame'
+      'body';
   }
 
-  .hero__text {
+  .hero__title {
+    grid-area: title;
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .hero__body {
+    grid-area: body;
     display: grid;
     gap: var(--s-3);
+    align-content: end;
   }
 
-  .hero__text h1 {
+  .hero__frame {
+    grid-area: frame;
+  }
+
+  .hero__title h1 {
     max-width: 14ch;
+  }
+
+  @media (max-width: 600px) {
+    .hero__title h1 {
+      font-size: clamp(2.4rem, 11.5vw, 3.4rem);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero__title h1 {
+      font-size: clamp(3rem, 6.4vw, 6rem);
+      max-width: 13ch;
+    }
+
+    .hero__inner {
+      grid-template-columns: 1.25fr 1fr;
+      grid-template-areas:
+        'title body'
+        'frame frame';
+      column-gap: var(--s-6);
+    }
   }
 
   .hero__frame {

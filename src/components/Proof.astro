@@ -1,0 +1,114 @@
+---
+// Client logos and testimonials. Renders nothing until src/data/proof.ts has entries.
+import { clients, testimonials } from '../data/proof';
+import type { Lang } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = {
+  en: { clients: 'They trusted us', voices: 'Client voices' },
+  fr: { clients: 'Ils nous ont fait confiance', voices: 'Paroles de clients' },
+}[lang];
+---
+
+{
+  clients.length > 0 && (
+    <section class="section container" aria-labelledby="clients">
+      <p class="label" id="clients">{copy.clients}</p>
+      <ul class="logos">
+        {clients.map((c) => (
+          <li>
+            {c.logo ? <img src={c.logo} alt={c.name} height="40" loading="lazy" /> : <span>{c.name}</span>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+{
+  testimonials.length > 0 && (
+    <section class="section container" aria-labelledby="voices">
+      <div class="section-head">
+        <p class="label"><span class="label--accent">{copy.voices}</span></p>
+        <h2 id="voices" class="visually-hidden">{copy.voices}</h2>
+      </div>
+      <div class="quotes">
+        {testimonials.map((q) => (
+          <figure class="quote" data-reveal>
+            <blockquote>“{q.quote[lang]}”</blockquote>
+            <figcaption>
+              {q.photo && <img src={q.photo} alt="" width="56" height="56" loading="lazy" />}
+              <span>
+                <b>{q.name}</b>
+                <span class="muted">{q.role[lang]}</span>
+              </span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .logos {
+    list-style: none;
+    padding: 0;
+    margin-block-start: var(--s-3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-5);
+  }
+
+  .logos img {
+    height: 40px;
+    width: auto;
+    opacity: 0.85;
+  }
+
+  .logos span {
+    font: 700 1.4rem/1 var(--display);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: var(--s-3);
+  }
+
+  .quote {
+    display: grid;
+    gap: var(--s-3);
+    padding: var(--s-4);
+    background: var(--surface);
+    border-inline-start: 4px solid var(--accent);
+  }
+
+  .quote blockquote {
+    margin: 0;
+    font: 600 clamp(1.4rem, 2.6vw, 1.9rem) / 1.15 var(--display);
+    text-transform: uppercase;
+  }
+
+  .quote figcaption {
+    display: flex;
+    gap: var(--s-2);
+    align-items: center;
+  }
+
+  .quote figcaption img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+  }
+
+  .quote figcaption > span {
+    display: grid;
+  }
+</style>

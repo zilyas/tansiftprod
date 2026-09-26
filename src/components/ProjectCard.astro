@@ -1,6 +1,6 @@
 ---
 import type { Project } from '../data/projects';
-import { categories } from '../data/projects';
+import { categories, projectUrl } from '../data/projects';
 import type { Lang } from '../i18n/routes';
 import { t } from '../i18n/ui';
 
@@ -11,6 +11,9 @@ interface Props {
 const { project, lang } = Astro.props;
 const tr = t(lang);
 const cat = categories.find((c) => c.id === project.category)?.label[lang];
+// Link to the case study when there is one, otherwise to the external post.
+const href = project.story ? projectUrl(project, lang) : project.link;
+const external = !project.story && !!project.link;
 ---
 
 <article class="project-card" data-category={project.category} data-reveal>
@@ -18,11 +21,27 @@ const cat = categories.find((c) => c.id === project.category)?.label[lang];
     <img src={project.cover} alt={project.title[lang]} width="1200" height="1500" loading="lazy" decoding="async" />
     <span class="frame__tag">{project.place}</span>
     {project.sample && <span class="sample-badge">{tr('media.sample')}</span>}
+    {
+      href && (
+        <span class="viewfinder" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+          <b>{lang === 'en' ? 'View' : 'Voir'}</b>
+        </span>
+      )
+    }
   </div>
   <div class="project-card__body">
     <p class="label">{cat}</p>
     <h3>
-      {project.link ? <a href={project.link} target="_blank" rel="noopener">{project.title[lang]}</a> : project.title[lang]}
+      {
+        href ? (
+          <a href={href} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+            {project.title[lang]}
+          </a>
+        ) : (
+          project.title[lang]
+        )
+      }
     </h3>
     <p class="muted">{project.summary[lang]}</p>
   </div>
@@ -64,5 +83,44 @@ const cat = categories.find((c) => c.id === project.category)?.label[lang];
     .project-card:hover img {
       transform: scale(1.03);
     }
+  }
+
+  /* Viewfinder: frame corners close in on hover or keyboard focus. */
+  .viewfinder {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s var(--ease);
+  }
+
+  .viewfinder i {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #f5e6c8;
+    transition: inset 0.3s var(--ease);
+  }
+
+  .viewfinder i:nth-child(1) { top: 16px; left: 16px; border-right: 0; border-bottom: 0; }
+  .viewfinder i:nth-child(2) { top: 16px; right: 16px; border-left: 0; border-bottom: 0; }
+  .viewfinder i:nth-child(3) { bottom: 16px; left: 16px; border-right: 0; border-top: 0; }
+  .viewfinder i:nth-child(4) { bottom: 16px; right: 16px; border-left: 0; border-top: 0; }
+
+  .viewfinder b {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    font: 500 0.8rem/1 var(--mono);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f5e6c8;
+    padding: 0.5rem 0.8rem;
+    background: rgb(13 15 15 / 0.65);
+  }
+
+  .project-card:hover .viewfinder,
+  .project-card:focus-within .viewfinder {
+    opacity: 1;
   }
 </style>

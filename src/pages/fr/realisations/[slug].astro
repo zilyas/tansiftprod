@@ -1,0 +1,12 @@
+---
+import CaseStudy from '../../../views/CaseStudy.astro';
+import { visibleProjects } from '../../../data/projects';
+
+export function getStaticPaths() {
+  return visibleProjects.filter((p) => p.story).map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+---
+
+<CaseStudy lang="fr" project={project} />

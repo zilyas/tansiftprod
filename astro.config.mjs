@@ -13,6 +13,7 @@ export default defineConfig({
   integrations: [
     // French pages use translated slugs, so language alternates are
     // declared with hreflang tags in each page head rather than here.
-    sitemap(),
+    // Sample case studies are previews only and stay out of the sitemap.
+    sitemap({ filter: (page) => !page.includes('/sample-') }),
   ],
 });

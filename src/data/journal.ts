@@ -185,6 +185,88 @@ export const articles: Article[] = [
       { label: 'Le Matin — Printemps Musical des Alizés 2026', url: 'https://lematin.ma/culture/le-printemps-musical-des-alizes-2026-sous-le-signe-du-dialogue/341760' },
     ],
   },
+  {
+    id: 'on-screen',
+    slug: {
+      en: 'essaouira-on-screen-films-and-series',
+      fr: 'essaouira-a-l-ecran-films-et-series',
+    },
+    title: {
+      en: 'Essaouira on screen: the films and series shot on its ramparts',
+      fr: 'Essaouira à l’écran : les films et séries tournés sur ses remparts',
+    },
+    description: {
+      en: 'From Orson Welles’ Othello to Game of Thrones, why Essaouira keeps playing other cities on screen, and what that means for your own shoot.',
+      fr: 'D’Othello d’Orson Welles à Game of Thrones, pourquoi Essaouira joue si souvent d’autres villes à l’écran, et ce que cela change pour votre tournage.',
+    },
+    summary: {
+      en: 'Orson Welles filmed parts of Othello on Essaouira’s ramparts, and the film won the top prize at Cannes in 1952. Decades later the city played Astapor in season 3 of Game of Thrones. Its 18th-century sea walls, planned in 1760 and listed by UNESCO in 2001, give productions a ready-made fortified port facing the Atlantic.',
+      fr: 'Orson Welles a tourné une partie d’Othello sur les remparts d’Essaouira, film récompensé par le grand prix de Cannes en 1952. Des décennies plus tard, la ville a incarné Astapor dans la saison 3 de Game of Thrones. Ses remparts du XVIIIe siècle, tracés en 1760 et inscrits à l’UNESCO en 2001, offrent aux productions un port fortifié face à l’Atlantique.',
+    },
+    published: '2026-09-26',
+    updated: '2026-09-26',
+    sections: {
+      en: [
+        {
+          heading: 'Othello: Orson Welles on the ramparts',
+          body: [
+            'Orson Welles shot parts of his Othello in Essaouira, then still known as Mogador, during a production famous for running out of money. The sea walls and towers stood in for the fortress of Cyprus. The film shared the top prize at the 1952 Cannes Film Festival.',
+          ],
+        },
+        {
+          heading: 'Game of Thrones: Essaouira as Astapor',
+          body: [
+            'In season 3 of Game of Thrones, Essaouira played Astapor, the slaver city where Daenerys Targaryen buys the Unsullied. The ramparts and the Skala walkway, with their line of bronze cannons, were used for the scenes on the city walls.',
+          ],
+        },
+        {
+          heading: 'Why productions keep coming back',
+          body: [
+            'The medina was planned in 1760 for Sultan Mohammed ben Abdallah and laid out by the engineer Théodore Cornut, following European military design. The result is a compact fortified port with straight streets, sea walls and towers, which can pass for many places and periods.',
+            'The Atlantic light is soft and changes quickly, the port is active from early morning, and the old town is small enough to move a crew on foot. UNESCO listed the medina as a World Heritage site in 2001.',
+          ],
+        },
+        {
+          heading: 'What this means for your shoot',
+          body: [
+            'The famous spots are also the busiest. Plan the Skala de la Ville and Skala du Port for early morning, before visitors arrive and before the trade wind builds. Heritage sites and public spaces need the filming permit, and some locations ask for extra local authorisation, so tell us early which places you want.',
+          ],
+        },
+      ],
+      fr: [
+        {
+          heading: 'Othello : Orson Welles sur les remparts',
+          body: [
+            'Orson Welles a tourné une partie de son Othello à Essaouira, qui s’appelait encore Mogador, lors d’une production célèbre pour ses difficultés financières. Les remparts et les tours figuraient la forteresse de Chypre. Le film a partagé le grand prix du Festival de Cannes en 1952.',
+          ],
+        },
+        {
+          heading: 'Game of Thrones : Essaouira devient Astapor',
+          body: [
+            'Dans la saison 3 de Game of Thrones, Essaouira a incarné Astapor, la cité esclavagiste où Daenerys Targaryen achète les Immaculés. Les remparts et la Skala, avec sa rangée de canons de bronze, ont servi aux scènes sur les murs de la ville.',
+          ],
+        },
+        {
+          heading: 'Pourquoi les productions reviennent',
+          body: [
+            'La médina a été tracée en 1760 pour le sultan Mohammed ben Abdallah par l’ingénieur Théodore Cornut, selon les principes de l’architecture militaire européenne. Le résultat : un port fortifié compact, aux rues droites, remparts et tours, qui peut incarner de nombreux lieux et époques.',
+            'La lumière atlantique est douce et change vite, le port s’anime dès le petit matin et la vieille ville est assez petite pour déplacer une équipe à pied. L’UNESCO a inscrit la médina au patrimoine mondial en 2001.',
+          ],
+        },
+        {
+          heading: 'Ce que cela change pour votre tournage',
+          body: [
+            'Les lieux célèbres sont aussi les plus fréquentés. Prévoyez la Skala de la Ville et la Skala du Port tôt le matin, avant les visiteurs et avant que l’alizé ne se lève. Les sites patrimoniaux et l’espace public exigent l’autorisation de tournage, et certains lieux demandent une autorisation locale supplémentaire : indiquez-nous tôt les endroits souhaités.',
+          ],
+        },
+      ],
+    },
+    sources: [
+      { label: 'Al Majalla — How Orson Welles resurrected the spirit of Othello in Morocco', url: 'https://en.majalla.com/node/304891/culture-social-affairs/how-orson-welles-resurrected-spirit-othello-morocco' },
+      { label: 'Slow Morocco — Game of Thrones filming locations', url: 'https://www.slowmorocco.com/morocco/game-of-thrones-filming-locations' },
+      { label: 'Wikipedia — Medina of Essaouira', url: 'https://en.wikipedia.org/wiki/Medina_of_Essaouira' },
+    ],
+  },
 ];
 
 export function articleUrl(a: Article, lang: Lang): string {

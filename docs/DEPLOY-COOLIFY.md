@@ -16,6 +16,7 @@ The site ships as a Docker image: Node builds the static site, then an unprivile
 4. **Environment Variables:** add
    - `SITE_URL` = `https://www.tansiftproduction.com` (your real domain, no trailing slash)
    - Tick **Is Build Variable?** — the domain is baked into canonical links, the sitemap, `robots.txt` and `llms.txt` at build time.
+   - `PUBLIC_SHOW_SAMPLES` = `false` on the live site (also a build variable). This hides the sample projects until real ones are added; the Work page then points visitors to the portfolio archive and Instagram. Leave it unset on a staging copy to preview the layout with samples.
 5. **Health Check** (optional, the image already declares one): path `/healthz`, port `8080`.
 6. Click **Deploy**.
 

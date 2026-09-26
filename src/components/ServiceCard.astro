@@ -6,11 +6,12 @@ import type { Lang } from '../i18n/routes';
 interface Props {
   service: Service;
   lang: Lang;
+  featured?: boolean;
 }
-const { service, lang } = Astro.props;
+const { service, lang, featured = false } = Astro.props;
 ---
 
-<article class="service-card" data-reveal>
+<article class:list={['service-card', { 'service-card--featured': featured }]} data-reveal>
   <div class="frame frame--wide">
     <img src={service.image} alt="" width="1200" height="1500" loading="lazy" decoding="async" />
   </div>
@@ -26,6 +27,14 @@ const { service, lang } = Astro.props;
     display: grid;
     background: var(--surface);
     transition: transform 0.25s var(--ease);
+  }
+
+  .service-card--featured h3 {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  }
+
+  .service-card--featured .service-card__body p {
+    font-size: 1.1rem;
   }
 
   .service-card__body {

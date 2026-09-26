@@ -7,9 +7,11 @@ import ServiceCard from '../components/ServiceCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Proof from '../components/Proof.astro';
+import { site } from '../data/site';
 import { chapterMedia } from '../data/media';
 import { services } from '../data/services';
-import { projects } from '../data/projects';
+import { visibleProjects } from '../data/projects';
 import { routes, path, type Lang } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import { faqSchema } from '../lib/schema';
@@ -121,7 +123,7 @@ const copy = {
   },
 }[lang];
 
-const featured = projects.slice(0, 4);
+const featured = visibleProjects.slice(0, 4);
 ---
 
 <Base lang={lang} title={copy.title} description={copy.description} paths={routes.home} jsonLd={[faqSchema(copy.faq)]}>
@@ -175,15 +177,24 @@ const featured = projects.slice(0, 4);
       <p class="lede muted">{copy.ch3Body}</p>
     </SectionHead>
     <div class="cards">
-      {services.map((s) => <ServiceCard service={s} lang={lang} />)}
+      {services.map((s, i) => <ServiceCard service={s} lang={lang} featured={i < 2} />)}
     </div>
   </section>
 
   <section class="section container" aria-labelledby="work">
     <SectionHead eyebrow={copy.workLabel} title={copy.workTitle} id="work" />
-    <div class="work-grid">
-      {featured.map((p) => <ProjectCard project={p} lang={lang} />)}
-    </div>
+    {
+      featured.length > 0 ? (
+        <div class="work-grid">
+          {featured.map((p) => <ProjectCard project={p} lang={lang} />)}
+        </div>
+      ) : (
+        <div class="btn-row work-empty">
+          <a class="btn btn--ghost" href={site.portfolio} target="_blank" rel="noopener">{tr('footer.archive')}</a>
+          <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
+        </div>
+      )
+    }
     <a class="text-link" href={path('work', lang)}>→ {tr('cta.work')}</a>
   </section>
 
@@ -200,6 +211,8 @@ const featured = projects.slice(0, 4);
       }
     </dl>
   </section>
+
+  <Proof lang={lang} />
 
   <Faq title={tr('faq.title')} items={copy.faq} />
 
@@ -238,16 +251,41 @@ const featured = projects.slice(0, 4);
     background: var(--bg);
   }
 
+  /* The two business-content services lead; the rest follow smaller. */
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    grid-template-columns: 1fr;
     gap: var(--s-3);
+  }
+
+  @media (min-width: 700px) {
+    .cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .cards {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .cards > :global(*) {
+      grid-column: span 2;
+    }
+
+    .cards > :global(*:nth-child(-n + 2)) {
+      grid-column: span 3;
+    }
   }
 
   .work-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: var(--s-3);
+    margin-block-end: var(--s-3);
+  }
+
+  .work-empty {
     margin-block-end: var(--s-3);
   }
 
