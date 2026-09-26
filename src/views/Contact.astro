@@ -1,0 +1,602 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../data/site';
+import { services } from '../data/services';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const copy = {
+  en: {
+    title: 'Start a Project | Tansift Production, Essaouira',
+    description:
+      'Tell Tansift Production about your shoot in Essaouira: social content, podcast, photo shoot, brand film, wedding or a visiting production. We reply within 24 hours.',
+    h1: 'Tell us about your shoot',
+    lede: 'Four quick steps. We read every brief and reply within 24 hours with questions, ideas or a quote.',
+    step: (n: number, total: number) => `Step ${n} of ${total}`,
+    s1: 'What are we making?',
+    s1help: 'Pick the closest match. You can add details at the end.',
+    production: 'A production shooting in Essaouira',
+    other: 'Something else',
+    s2: 'When and where?',
+    date: 'Shoot date or month',
+    dateHelp: 'An approximate date is fine.',
+    flexible: 'Dates are flexible / not sure yet',
+    location: 'Location',
+    locationHelp: 'For example: medina, beach, a riad, Sidi Kaouki.',
+    s3: 'Budget range',
+    s3help: 'This helps us suggest the right crew size. It is not a commitment.',
+    budgets: ['Under 5,000 MAD (≈ €460)', '5,000–15,000 MAD (≈ €460–1,400)', '15,000–50,000 MAD (≈ €1,400–4,600)', 'Over 50,000 MAD (≈ €4,600+)', 'Not sure yet'],
+    s4: 'How can we reach you?',
+    name: 'Your name',
+    company: 'Company or project (optional)',
+    contact: 'Email or WhatsApp number',
+    contactHelp: 'We reply on the channel you give us.',
+    message: 'Anything else we should know? (optional)',
+    back: 'Back',
+    next: 'Next',
+    send: 'Send the brief',
+    sendWa: 'Send on WhatsApp',
+    sendMail: 'Send by email',
+    required: 'This field is required.',
+    chooseOne: 'Please choose one option.',
+    doneTitle: 'Your brief is ready',
+    doneText: 'Send it to us on the channel that opened. If nothing opened, copy it and send it to us on Instagram.',
+    copy: 'Copy the brief',
+    copied: 'Copied',
+    dm: 'Message us on Instagram',
+    noscript: 'This form needs JavaScript. You can also message us directly on Instagram:',
+    briefTitle: 'New brief from the Tansift website',
+    labels: { type: 'Project', date: 'Date', location: 'Location', budget: 'Budget', name: 'Name', company: 'Company', contact: 'Contact', message: 'Details' },
+  },
+  fr: {
+    title: 'Démarrer un projet | Tansift Production, Essaouira',
+    description:
+      'Parlez à Tansift Production de votre tournage à Essaouira : contenus sociaux, podcast, shooting photo, film de marque, mariage ou production de passage. Réponse sous 24 heures.',
+    h1: 'Parlez-nous de votre tournage',
+    lede: 'Quatre étapes rapides. Nous lisons chaque brief et répondons sous 24 heures avec des questions, des idées ou un devis.',
+    step: (n: number, total: number) => `Étape ${n} sur ${total}`,
+    s1: 'Que réalisons-nous ?',
+    s1help: 'Choisissez l’option la plus proche. Vous pourrez préciser à la fin.',
+    production: 'Une production qui tourne à Essaouira',
+    other: 'Autre chose',
+    s2: 'Quand et où ?',
+    date: 'Date ou mois du tournage',
+    dateHelp: 'Une date approximative suffit.',
+    flexible: 'Dates flexibles / pas encore fixées',
+    location: 'Lieu',
+    locationHelp: 'Par exemple : médina, plage, un riad, Sidi Kaouki.',
+    s3: 'Fourchette de budget',
+    s3help: 'Cela nous aide à proposer la bonne taille d’équipe. Ce n’est pas un engagement.',
+    budgets: ['Moins de 5 000 MAD (≈ 460 €)', '5 000 à 15 000 MAD (≈ 460 à 1 400 €)', '15 000 à 50 000 MAD (≈ 1 400 à 4 600 €)', 'Plus de 50 000 MAD (≈ 4 600 € et plus)', 'Je ne sais pas encore'],
+    s4: 'Comment vous joindre ?',
+    name: 'Votre nom',
+    company: 'Entreprise ou projet (facultatif)',
+    contact: 'E-mail ou numéro WhatsApp',
+    contactHelp: 'Nous répondons sur le canal que vous indiquez.',
+    message: 'Autre chose à savoir ? (facultatif)',
+    back: 'Retour',
+    next: 'Suivant',
+    send: 'Envoyer le brief',
+    sendWa: 'Envoyer sur WhatsApp',
+    sendMail: 'Envoyer par e-mail',
+    required: 'Ce champ est obligatoire.',
+    chooseOne: 'Veuillez choisir une option.',
+    doneTitle: 'Votre brief est prêt',
+    doneText: 'Envoyez-le-nous sur le canal qui s’est ouvert. Si rien ne s’est ouvert, copiez-le et envoyez-le-nous sur Instagram.',
+    copy: 'Copier le brief',
+    copied: 'Copié',
+    dm: 'Nous écrire sur Instagram',
+    noscript: 'Ce formulaire nécessite JavaScript. Vous pouvez aussi nous écrire directement sur Instagram :',
+    briefTitle: 'Nouveau brief depuis le site Tansift',
+    labels: { type: 'Projet', date: 'Date', location: 'Lieu', budget: 'Budget', name: 'Nom', company: 'Entreprise', contact: 'Contact', message: 'Détails' },
+  },
+}[lang];
+
+const types = [
+  ...services.map((s) => ({ id: s.id, label: s.name[lang] })),
+  { id: 'production', label: copy.production },
+  { id: 'other', label: copy.other },
+];
+
+const sendLabel = site.whatsapp ? copy.sendWa : site.email ? copy.sendMail : copy.send;
+const config = {
+  whatsapp: site.whatsapp,
+  email: site.email,
+  briefTitle: copy.briefTitle,
+  labels: copy.labels,
+  msgRequired: copy.required,
+  msgChoose: copy.chooseOne,
+  stepText: [1, 2, 3, 4].map((n) => copy.step(n, 4)),
+  copied: copy.copied,
+};
+---
+
+<Base
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+  paths={routes.contact}
+  jsonLd={[
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.cta'), path: routes.contact[lang] },
+    ]),
+  ]}
+>
+  <section class="section container contact">
+    <SectionHead eyebrow={tr('nav.cta')} title={copy.h1} level="h1">
+      <p class="lede">{copy.lede}</p>
+    </SectionHead>
+
+    <noscript>
+      <p class="noscript">{copy.noscript} <a href={site.instagram}>{site.instagramHandle}</a></p>
+    </noscript>
+
+    <form
+      class="brief"
+      id="brief"
+      novalidate
+      data-mcp-action="send-project-brief"
+      data-mcp-description="Send a project brief to Tansift Production, a video, photo and social media content studio in Essaouira, Morocco."
+    >
+      <div class="brief__progress" aria-hidden="true">
+        <i class="on"></i><i></i><i></i><i></i>
+      </div>
+      <p class="label brief__step" aria-live="polite">{copy.step(1, 4)}</p>
+
+      <fieldset class="brief__panel" data-step="1">
+        <legend>{copy.s1}</legend>
+        <p class="help" id="type-help">{copy.s1help}</p>
+        <div class="choices" aria-describedby="type-help">
+          {
+            types.map((ty, i) => (
+              <label class="choice">
+                <input type="radio" name="type" value={ty.label} data-id={ty.id} required={i === 0} />
+                <span>{ty.label}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="error" hidden></p>
+      </fieldset>
+
+      <fieldset class="brief__panel" data-step="2">
+        <legend>{copy.s2}</legend>
+        <div class="field">
+          <label for="date">{copy.date}</label>
+          <input id="date" name="date" type="month" aria-describedby="date-help" />
+          <p class="help" id="date-help">{copy.dateHelp}</p>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="flexible" id="flexible" />
+          <span>{copy.flexible}</span>
+        </label>
+        <div class="field">
+          <label for="location">{copy.location}</label>
+          <input id="location" name="location" type="text" autocomplete="off" aria-describedby="location-help" />
+          <p class="help" id="location-help">{copy.locationHelp}</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="brief__panel" data-step="3">
+        <legend>{copy.s3}</legend>
+        <p class="help" id="budget-help">{copy.s3help}</p>
+        <div class="choices choices--stack" aria-describedby="budget-help">
+          {
+            copy.budgets.map((b, i) => (
+              <label class="choice">
+                <input type="radio" name="budget" value={b} required={i === 0} />
+                <span>{b}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="error" hidden></p>
+      </fieldset>
+
+      <fieldset class="brief__panel" data-step="4">
+        <legend>{copy.s4}</legend>
+        <div class="field">
+          <label for="name">{copy.name}</label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+          <p class="error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="company">{copy.company}</label>
+          <input id="company" name="company" type="text" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="contact">{copy.contact}</label>
+          <input id="contact" name="contact" type="text" autocomplete="email" inputmode="email" required aria-describedby="contact-help" />
+          <p class="help" id="contact-help">{copy.contactHelp}</p>
+          <p class="error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="message">{copy.message}</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+      </fieldset>
+
+      <div class="brief__nav">
+        <button type="button" class="btn btn--ghost" data-back hidden>{copy.back}</button>
+        <button type="button" class="btn" data-next>{copy.next}</button>
+        <button type="submit" class="btn" data-send hidden>{sendLabel}</button>
+      </div>
+
+      <div class="brief__done" hidden tabindex="-1">
+        <h2>{copy.doneTitle}</h2>
+        <p>{copy.doneText}</p>
+        <pre class="brief__text"></pre>
+        <div class="btn-row">
+          <button type="button" class="btn btn--ghost" data-copy>{copy.copy}</button>
+          <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">{copy.dm}</a>
+        </div>
+      </div>
+    </form>
+
+    <aside class="contact__aside">
+      <p class="label">{tr('cta.reply')}</p>
+      <ul>
+        <li><a href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a></li>
+        {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
+        {site.whatsapp && <li><a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">WhatsApp</a></li>}
+        {site.phone && <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>}
+      </ul>
+      <p class="muted">Essaouira, Maroc · 31.51° N 9.77° W</p>
+    </aside>
+  </section>
+</Base>
+
+<script is:inline define:vars={{ config }}>
+  const form = document.getElementById('brief');
+  const panels = [...form.querySelectorAll('.brief__panel')];
+  const bars = [...form.querySelectorAll('.brief__progress i')];
+  const stepLabel = form.querySelector('.brief__step');
+  const back = form.querySelector('[data-back]');
+  const next = form.querySelector('[data-next]');
+  const send = form.querySelector('[data-send]');
+  const done = form.querySelector('.brief__done');
+  let step = 0;
+
+  // Preselect the project type from ?type= (links from service pages).
+  const pre = new URLSearchParams(location.search).get('type');
+  if (pre) {
+    const radio = form.querySelector(`input[name="type"][data-id="${CSS.escape(pre)}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  function show(i) {
+    step = i;
+    panels.forEach((p, n) => (p.hidden = n !== i));
+    bars.forEach((b, n) => b.classList.toggle('on', n <= i));
+    stepLabel.textContent = config.stepText[i];
+    back.hidden = i === 0;
+    next.hidden = i === panels.length - 1;
+    send.hidden = i !== panels.length - 1;
+  }
+
+  function setError(el, msg) {
+    const box = el.closest('.field, fieldset').querySelector('.error');
+    if (!box) return;
+    box.textContent = msg;
+    box.hidden = !msg;
+    if (el.matches('input, textarea')) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+
+  function valid(panel) {
+    let ok = true;
+    let first = null;
+    const radios = panel.querySelectorAll('input[type="radio"]');
+    if (radios.length && ![...radios].some((r) => r.checked)) {
+      setError(radios[0], config.msgChoose);
+      ok = false;
+      first = first || radios[0];
+    } else if (radios.length) {
+      setError(radios[0], '');
+    }
+    panel.querySelectorAll('input[required]:not([type="radio"]), textarea[required]').forEach((f) => {
+      if (!f.value.trim()) {
+        setError(f, config.msgRequired);
+        ok = false;
+        first = first || f;
+      } else setError(f, '');
+    });
+    if (first) first.focus();
+    return ok;
+  }
+
+  next.addEventListener('click', () => {
+    if (!valid(panels[step])) return;
+    show(step + 1);
+    panels[step].querySelector('input, textarea')?.focus();
+  });
+
+  back.addEventListener('click', () => {
+    show(step - 1);
+    panels[step].querySelector('input, textarea')?.focus();
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!valid(panels[step])) return;
+    const d = new FormData(form);
+    const L = config.labels;
+    const date = d.get('flexible') ? `${d.get('date') || ''} (flexible)`.trim() : d.get('date');
+    const lines = [
+      config.briefTitle,
+      '',
+      `${L.type}: ${d.get('type') || ''}`,
+      `${L.date}: ${date || '-'}`,
+      `${L.location}: ${d.get('location') || '-'}`,
+      `${L.budget}: ${d.get('budget') || ''}`,
+      `${L.name}: ${d.get('name') || ''}`,
+      d.get('company') ? `${L.company}: ${d.get('company')}` : '',
+      `${L.contact}: ${d.get('contact') || ''}`,
+      d.get('message') ? `\n${L.message}: ${d.get('message')}` : '',
+    ].filter(Boolean);
+    const text = lines.join('\n');
+
+    form.querySelector('.brief__text').textContent = text;
+    panels.forEach((p) => (p.hidden = true));
+    form.querySelector('.brief__nav').hidden = true;
+    form.querySelector('.brief__progress').hidden = true;
+    stepLabel.hidden = true;
+    done.hidden = false;
+    done.focus();
+
+    if (config.whatsapp) {
+      window.open(`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    } else if (config.email) {
+      location.href = `mailto:${config.email}?subject=${encodeURIComponent(config.briefTitle)}&body=${encodeURIComponent(text)}`;
+    }
+  });
+
+  form.querySelector('[data-copy]').addEventListener('click', (e) => {
+    const text = form.querySelector('.brief__text').textContent;
+    navigator.clipboard?.writeText(text).then(
+      () => (e.target.textContent = config.copied),
+      () => {
+        const r = document.createRange();
+        r.selectNodeContents(form.querySelector('.brief__text'));
+        const s = getSelection();
+        s.removeAllRanges();
+        s.addRange(r);
+      },
+    );
+  });
+
+  form.classList.add('is-stepped');
+  show(0);
+</script>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 960px) {
+    .contact {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .contact > :global(.section-head),
+    .contact > noscript {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .brief {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .brief__progress {
+    display: flex;
+    gap: 6px;
+  }
+
+  .brief__progress i {
+    flex: 1;
+    height: 5px;
+    background: var(--surface-2);
+  }
+
+  .brief__progress i.on {
+    background: var(--accent);
+  }
+
+  .brief:not(.is-stepped) .brief__progress,
+  .brief:not(.is-stepped) .brief__step,
+  .brief:not(.is-stepped) .brief__nav {
+    display: none;
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-2);
+    min-width: 0;
+  }
+
+  legend {
+    font: 700 clamp(1.6rem, 4vw, 2.2rem) / 1 var(--display);
+    text-transform: uppercase;
+    margin-block-end: var(--s-1);
+    padding: 0;
+  }
+
+  .choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .choices--stack {
+    display: grid;
+  }
+
+  .choice {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .choice span {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+
+  .choice:hover span {
+    border-color: var(--ink);
+  }
+
+  .choice input:checked + span {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .choice input:focus-visible + span {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .field label {
+    font-weight: 600;
+  }
+
+  input[type='text'],
+  input[type='month'],
+  textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.7rem 0.9rem;
+    font: 400 1rem/1.4 var(--body);
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 0;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  input[aria-invalid='true'] {
+    border-color: var(--warn);
+  }
+
+  .check {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  .check input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+  }
+
+  .help {
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .error {
+    color: var(--warn);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .brief__nav {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+
+  .brief__nav [data-next],
+  .brief__nav [data-send] {
+    margin-inline-start: auto;
+  }
+
+  .brief__done {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .brief__done h2 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+  }
+
+  .brief__text {
+    white-space: pre-wrap;
+    font: 400 0.85rem/1.55 var(--mono);
+    padding: var(--s-2);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    overflow-x: auto;
+  }
+
+  .contact__aside {
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+  }
+
+  .contact__aside ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+  }
+
+  .contact__aside a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font: 600 1.2rem/1.2 var(--body);
+    color: var(--ink);
+  }
+
+  .noscript {
+    padding: var(--s-2);
+    border: 1px dashed var(--accent);
+  }
+</style>

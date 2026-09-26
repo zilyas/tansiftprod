@@ -1,0 +1,165 @@
+---
+import '@fontsource/barlow-condensed/600.css';
+import '@fontsource/barlow-condensed/700.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import type { Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  // This page's path in each language, used for canonical and hreflang.
+  paths: Record<Lang, string>;
+  jsonLd?: object[];
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { lang, title, description, paths, jsonLd = [], ogImage, ogType = 'website', noindex = false } = Astro.props;
+const tr = t(lang);
+const siteUrl = Astro.site ?? new URL('https://www.tansiftproduction.com');
+const abs = (p: string) => new URL(p, siteUrl).href;
+const canonical = abs(paths[lang]);
+const image = abs(ogImage ?? '/media/og.jpg');
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': abs('/#organization'),
+  name: site.name,
+  url: abs('/'),
+  image,
+  description:
+    lang === 'en'
+      ? 'Video production, photography and social media content studio based in Essaouira, Morocco.'
+      : 'Studio de production vidéo, photographie et contenus réseaux sociaux basé à Essaouira, Maroc.',
+  areaServed: ['Essaouira', 'Marrakech-Safi', 'Morocco'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.city,
+    addressRegion: site.region,
+    addressCountry: site.country,
+    ...(site.streetAddress ? { streetAddress: site.streetAddress } : {}),
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  sameAs: [site.instagram, site.portfolio],
+  knowsLanguage: ['fr', 'en', 'ar'],
+  ...(site.email ? { email: site.email } : {}),
+  ...(site.phone ? { telephone: site.phone } : {}),
+  ...(site.foundingYear ? { foundingDate: site.foundingYear } : {}),
+};
+
+const schemas = [org, ...jsonLd];
+---
+
+<!doctype html>
+<html lang={lang} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {
+      !noindex && (
+        <>
+          <link rel="canonical" href={canonical} />
+          <link rel="alternate" hreflang="en" href={abs(paths.en)} />
+          <link rel="alternate" hreflang="fr" href={abs(paths.fr)} />
+          <link rel="alternate" hreflang="x-default" href={abs(paths.en)} />
+        </>
+      )
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#0d0f0f" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'fr_FR'} />
+    <meta property="og:locale:alternate" content={lang === 'en' ? 'fr_FR' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{tr('skip')}</a>
+    <Header lang={lang} paths={paths} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+
+    <script>
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Reveal blocks as they scroll into view, with a small stagger between
+      // siblings. Content is fully visible without JavaScript.
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      items.forEach((el) => {
+        const sibs = el.parentElement ? [...el.parentElement.children].filter((c) => c.hasAttribute('data-reveal')) : [];
+        const i = sibs.indexOf(el);
+        if (i > 0) el.style.setProperty('--d', `${Math.min(i * 70, 350)}ms`);
+      });
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+        // Safety net: never leave content hidden if the observer is slow.
+        setTimeout(() => items.forEach((el) => el.classList.add('is-in')), 2500);
+      } else {
+        items.forEach((el) => el.classList.add('is-in'));
+      }
+
+      // Subtle parallax on images marked data-parallax (never on text).
+      const layers = [...document.querySelectorAll<HTMLElement>('[data-parallax]')];
+      if (layers.length && !reduce) {
+        let queued = false;
+        const tick = () => {
+          const vh = innerHeight;
+          for (const el of layers) {
+            const r = el.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > vh) continue;
+            const progress = (r.top + r.height / 2 - vh / 2) / vh; // -0.5 … 0.5 around centre
+            el.style.setProperty('--py', `${(-progress * r.height * 0.1).toFixed(1)}px`);
+          }
+          queued = false;
+        };
+        addEventListener('scroll', () => {
+          if (!queued) {
+            queued = true;
+            requestAnimationFrame(tick);
+          }
+        }, { passive: true });
+        tick();
+      }
+    </script>
+  </body>
+</html>

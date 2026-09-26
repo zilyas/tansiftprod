@@ -1,0 +1,68 @@
+---
+import type { Service } from '../data/services';
+import { serviceUrl } from '../data/services';
+import type { Lang } from '../i18n/routes';
+
+interface Props {
+  service: Service;
+  lang: Lang;
+  featured?: boolean;
+}
+const { service, lang, featured = false } = Astro.props;
+---
+
+<article class:list={['service-card', { 'service-card--featured': featured }]} data-reveal>
+  <div class="frame frame--wide">
+    <img src={service.image} alt="" width="1200" height="1500" loading="lazy" decoding="async" />
+  </div>
+  <div class="service-card__body">
+    <h3><a href={serviceUrl(service, lang)}>{service.name[lang]}</a></h3>
+    <p class="muted">{service.line[lang]}</p>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    position: relative;
+    display: grid;
+    background: var(--surface);
+    transition: transform 0.25s var(--ease);
+  }
+
+  .service-card--featured h3 {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  }
+
+  .service-card--featured .service-card__body p {
+    font-size: 1.1rem;
+  }
+
+  .service-card__body {
+    display: grid;
+    gap: var(--s-1);
+    padding: var(--s-3);
+  }
+
+  .service-card h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* Whole card is clickable through the heading link. */
+  .service-card h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .service-card:hover h3 a,
+  .service-card:focus-within h3 a {
+    color: var(--accent);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .service-card:hover {
+      transform: translateY(-4px);
+    }
+  }
+</style>

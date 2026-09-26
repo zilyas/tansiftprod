@@ -1,0 +1,49 @@
+---
+import { path, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { site } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  text?: string;
+}
+
+const { lang, title, text } = Astro.props;
+const tr = t(lang);
+---
+
+<section class="cta-band container" aria-labelledby="cta-band-title" data-reveal>
+  <div class="cta-band__inner">
+    <p class="label label--accent">{lang === 'en' ? 'Closing scene' : 'Scène finale'}</p>
+    <h2 id="cta-band-title">{title ?? tr('cta.brief')}</h2>
+    <p class="lede">{text ?? (lang === 'en'
+      ? 'Three quick questions about your project, then we plan the shoot together.'
+      : 'Trois questions rapides sur votre projet, puis nous préparons le tournage ensemble.')}</p>
+    <div class="btn-row">
+      <a class="btn" href={path('contact', lang)}>{tr('nav.cta')}</a>
+      <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
+    </div>
+    <p class="label">{tr('cta.reply')}</p>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    margin-block-start: var(--s-7);
+  }
+
+  .cta-band__inner {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.5rem, 5vw, 4rem);
+    background:
+      radial-gradient(90% 120% at 100% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+      var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .cta-band h2 {
+    font-size: clamp(2.2rem, 7vw, 5rem);
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Media from '../components/Media.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { studioMedia } from '../data/media';
+import { site } from '../data/site';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+// TODO: confirm the story behind the name with the Tansift team, and add
+// crew names, roles and credits in `crew` below.
+const copy = {
+  en: {
+    title: 'Studio | A Film, Photo & Content Crew in Essaouira | Tansift',
+    description:
+      'Meet Tansift Production, a film, photography and social content crew living and working in Essaouira, Morocco.',
+    eyebrow: 'The studio',
+    h1: 'A crew that lives where it films',
+    lede: 'Tansift Production is a team of directors, camera operators, photographers and editors based in Essaouira. We make films, Reels, podcasts and photos for local businesses, brands and visiting productions.',
+    nameLabel: 'The name',
+    name: 'Tansift echoes the Tensift, the river and historic region of Morocco’s Atlantic south-west, to which Essaouira belonged. We use it as a reminder of where our stories come from.',
+    howLabel: 'How we work',
+    how: [
+      { k: 'Local first', v: 'We know the places, the people and the hours. It saves time on set and it shows on screen.' },
+      { k: 'Small crews', v: 'A tight team moves fast in the medina, on the beach and in small spaces.' },
+      { k: 'Made to be posted', v: 'We think about vertical, square and wide formats before we press record.' },
+    ],
+    langLabel: 'Languages on set',
+    langs: 'French · English · Darija · Arabic',
+  },
+  fr: {
+    title: 'Studio | Une équipe film, photo et contenu à Essaouira | Tansift',
+    description:
+      'Découvrez Tansift Production, une équipe de film, photographie et contenus sociaux qui vit et travaille à Essaouira, Maroc.',
+    eyebrow: 'Le studio',
+    h1: 'Une équipe qui vit là où elle tourne',
+    lede: 'Tansift Production réunit réalisateurs, opérateurs, photographes et monteurs basés à Essaouira. Nous réalisons films, Reels, podcasts et photos pour les entreprises locales, les marques et les productions de passage.',
+    nameLabel: 'Le nom',
+    name: 'Tansift fait écho au Tensift, le fleuve et la région historique du sud-ouest atlantique marocain dont Essaouira faisait partie. Il nous rappelle d’où viennent nos histoires.',
+    howLabel: 'Notre façon de travailler',
+    how: [
+      { k: 'Le local d’abord', v: 'Nous connaissons les lieux, les gens et les heures. Cela fait gagner du temps sur le plateau et cela se voit à l’écran.' },
+      { k: 'Petites équipes', v: 'Une équipe resserrée se déplace vite dans la médina, sur la plage et dans les petits espaces.' },
+      { k: 'Pensé pour être publié', v: 'Nous pensons formats vertical, carré et large avant d’appuyer sur enregistrer.' },
+    ],
+    langLabel: 'Langues sur le plateau',
+    langs: 'Français · anglais · darija · arabe',
+  },
+}[lang];
+
+// Crew cards appear only once names are added.
+const crew: { name: string; role: Record<Lang, string>; photo?: string }[] = [];
+---
+
+<Base
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+  paths={routes.studio}
+  jsonLd={[
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.studio'), path: routes.studio[lang] },
+    ]),
+  ]}
+>
+  <section class="section container">
+    <SectionHead eyebrow={copy.eyebrow} title={copy.h1} level="h1">
+      <p class="lede">{copy.lede}</p>
+    </SectionHead>
+    <div data-reveal>
+      <Media
+        lang={lang}
+        src={studioMedia.team.src}
+        alt={studioMedia.team.alt[lang]}
+        width={studioMedia.team.width}
+        height={studioMedia.team.height}
+        ratio="scope"
+        tag="Essaouira"
+        sample={studioMedia.team.placeholder}
+        eager
+        parallax
+      />
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="name">
+    <div class="name-block" data-reveal>
+      <p class="label label--accent">{copy.nameLabel}</p>
+      <h2 id="name">Tansift</h2>
+      <p class="lede">{copy.name}</p>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="how">
+    <SectionHead eyebrow={copy.eyebrow} title={copy.howLabel} id="how" />
+    <dl class="how">
+      {
+        copy.how.map((h) => (
+          <div data-reveal>
+            <dt>{h.k}</dt>
+            <dd class="muted">{h.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="label langs">{copy.langLabel}: <span class="label--accent">{copy.langs}</span></p>
+  </section>
+
+  {
+    crew.length > 0 && (
+      <section class="section container" aria-labelledby="crew">
+        <SectionHead eyebrow="Crew" title={lang === 'en' ? 'The crew' : 'L’équipe'} id="crew" />
+        <ul class="crew">
+          {crew.map((c) => (
+            <li>
+              {c.photo && <img src={c.photo} alt={c.name} width="600" height="750" loading="lazy" />}
+              <h3>{c.name}</h3>
+              <p class="muted">{c.role[lang]}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="section container" aria-labelledby="follow">
+    <div class="follow" data-reveal>
+      <h2 id="follow">{tr('footer.follow')}</h2>
+      <div class="btn-row">
+        <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
+        <a class="btn btn--ghost" href={site.portfolio} target="_blank" rel="noopener">{tr('footer.archive')}</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .name-block {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.5rem, 5vw, 3.5rem);
+    background: var(--surface);
+    border-inline-start: 4px solid var(--accent);
+  }
+
+  .name-block h2 {
+    font-size: clamp(3rem, 12vw, 8rem);
+  }
+
+  .how {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: var(--s-4);
+  }
+
+  .how div {
+    border-block-start: 3px solid var(--teal-deep);
+    padding-block-start: var(--s-2);
+    display: grid;
+    gap: var(--s-1);
+  }
+
+  .how dt {
+    font: 700 1.5rem/1.05 var(--display);
+    text-transform: uppercase;
+  }
+
+  .how dd {
+    margin: 0;
+  }
+
+  .langs {
+    margin-block-start: var(--s-4);
+  }
+
+  .crew {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: var(--s-3);
+  }
+
+  .follow {
+    display: grid;
+    gap: var(--s-3);
+  }
+</style>

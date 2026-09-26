@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  lang="en"
+  title="Cut! Page not found | Tansift Production"
+  description="This page didn’t make the final edit."
+  paths={{ en: '/404/', fr: '/404/' }}
+  noindex
+>
+  <section class="section container lost">
+    <p class="label label--accent">Scene 404 · Take 1</p>
+    <h1>Cut!</h1>
+    <p class="lede">This scene didn’t make the final edit. <span lang="fr">Cette scène n’a pas survécu au montage.</span></p>
+    <div class="btn-row">
+      <a class="btn" href="/">Back to the start</a>
+      <a class="btn btn--ghost" href="/fr/">Retour à l’accueil</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    display: grid;
+    gap: var(--s-3);
+    min-height: 50vh;
+    align-content: center;
+  }
+
+  .lost h1 {
+    font-size: clamp(5rem, 22vw, 14rem);
+  }
+</style>

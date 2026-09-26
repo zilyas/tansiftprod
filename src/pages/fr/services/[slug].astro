@@ -1,0 +1,12 @@
+---
+import Service from '../../../views/Service.astro';
+import { services } from '../../../data/services';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug.fr }, props: { service } }));
+}
+
+const { service } = Astro.props;
+---
+
+<Service lang="fr" service={service} />

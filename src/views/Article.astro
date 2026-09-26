@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { articleUrl, type Article } from '../data/journal';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { articleSchema, breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+  article: Article;
+}
+const { lang, article } = Astro.props;
+const tr = t(lang);
+const paths = { en: articleUrl(article, 'en'), fr: articleUrl(article, 'fr') };
+const fmt = new Intl.DateTimeFormat(lang, { dateStyle: 'long' });
+const copy = {
+  en: { short: 'Short answer', sources: 'Sources', toc: 'In this guide' },
+  fr: { short: 'En bref', sources: 'Sources', toc: 'Dans ce guide' },
+}[lang];
+const sections = article.sections[lang];
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+---
+
+<Base
+  lang={lang}
+  title={`${article.title[lang]} | Tansift`}
+  description={article.description[lang]}
+  paths={paths}
+  ogType="article"
+  jsonLd={[
+    articleSchema(Astro.site, {
+      title: article.title[lang],
+      description: article.description[lang],
+      path: paths[lang],
+      published: article.published,
+      updated: article.updated,
+      lang,
+    }),
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.journal'), path: routes.journal[lang] },
+      { name: article.title[lang], path: paths[lang] },
+    ]),
+  ]}
+>
+  <article class="section container article">
+    <nav class="crumbs label" aria-label="Breadcrumb">
+      <a href={routes.home[lang]}>{tr('breadcrumb.home')}</a>
+      <span aria-hidden="true">/</span>
+      <a href={routes.journal[lang]}>{tr('nav.journal')}</a>
+    </nav>
+
+    <header class="article__head">
+      <h1>{article.title[lang]}</h1>
+      <p class="label">
+        {tr('updated')} <time datetime={article.updated}>{fmt.format(new Date(article.updated))}</time> · Tansift Production, Essaouira
+      </p>
+    </header>
+
+    <aside class="summary" aria-labelledby="summary">
+      <p class="label label--accent" id="summary">{copy.short}</p>
+      <p class="lede">{article.summary[lang]}</p>
+    </aside>
+
+    <nav class="toc" aria-labelledby="toc">
+      <p class="label" id="toc">{copy.toc}</p>
+      <ol>
+        {sections.map((s) => <li><a href={`#${slug(s.heading)}`}>{s.heading}</a></li>)}
+      </ol>
+    </nav>
+
+    <div class="prose article__body">
+      {
+        sections.map((s) => (
+          <section>
+            <h2 id={slug(s.heading)}>{s.heading}</h2>
+            {s.body.map((p) => <p>{p}</p>)}
+          </section>
+        ))
+      }
+    </div>
+
+    <footer class="sources">
+      <p class="label">{copy.sources}</p>
+      <ul>
+        {article.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+      </ul>
+    </footer>
+  </article>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .article {
+    display: grid;
+    gap: var(--s-4);
+    padding-block-start: var(--s-5);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .article__head {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .article__head h1 {
+    font-size: clamp(2.2rem, 6vw, 4.4rem);
+    max-width: 22ch;
+  }
+
+  .summary {
+    display: grid;
+    gap: var(--s-1);
+    padding: var(--s-3);
+    background: var(--surface);
+    border-inline-start: 4px solid var(--accent);
+    max-width: 70ch;
+  }
+
+  .toc ol {
+    margin: var(--s-1) 0 0;
+    padding-inline-start: 1.3rem;
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .toc a {
+    color: var(--ink);
+  }
+
+  .article__body section {
+    display: grid;
+    gap: var(--s-2);
+    margin-block-start: var(--s-4);
+  }
+
+  .article__body h2 {
+    font-size: clamp(1.6rem, 3.6vw, 2.3rem);
+  }
+
+  .sources {
+    display: grid;
+    gap: var(--s-1);
+    padding-block-start: var(--s-3);
+    border-block-start: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+
+  .sources ul {
+    padding-inline-start: 1.2rem;
+    display: grid;
+    gap: 0.3rem;
+  }
+</style>

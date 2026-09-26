@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { visibleProjects as projects, categories } from '../data/projects';
+import { site } from '../data/site';
+import { routes, type Lang } from '../i18n/routes';
+import { t } from '../i18n/ui';
+import { breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tr = t(lang);
+
+const copy = {
+  en: {
+    title: 'Work | Films, Reels, Podcasts & Photography from Essaouira | Tansift',
+    description:
+      'Selected productions by Tansift Production in Essaouira: social media content, video podcasts, photography, brand films and weddings.',
+    h1: 'Work',
+    lede: 'A selection of films, Reels, podcasts and photo shoots made in and around Essaouira.',
+    filter: 'Filter by type',
+    all: 'All',
+    archive: 'See the full archive on our portfolio',
+    emptyTitle: 'New case studies are on their way',
+    emptyText: 'We are adding our latest films, Reels and photo shoots here. In the meantime, the full archive is on our portfolio and our newest work is on Instagram.',
+    count: (n: number) => `${n} projects shown`,
+  },
+  fr: {
+    title: 'Réalisations | Films, Reels, podcasts et photos à Essaouira | Tansift',
+    description:
+      'Sélection de productions de Tansift Production à Essaouira : contenus réseaux sociaux, podcasts vidéo, photographie, films de marque et mariages.',
+    h1: 'Réalisations',
+    lede: 'Une sélection de films, Reels, podcasts et shootings photo réalisés à Essaouira et dans sa région.',
+    filter: 'Filtrer par type',
+    all: 'Tout',
+    archive: 'Voir toutes les archives sur notre portfolio',
+    emptyTitle: 'De nouvelles études de cas arrivent',
+    emptyText: 'Nous ajoutons ici nos derniers films, Reels et shootings photo. En attendant, toutes nos archives sont sur notre portfolio et nos réalisations les plus récentes sur Instagram.',
+    count: (n: number) => `${n} projets affichés`,
+  },
+}[lang];
+
+const used = categories.filter((c) => projects.some((p) => p.category === c.id));
+---
+
+<Base
+  lang={lang}
+  title={copy.title}
+  description={copy.description}
+  paths={routes.work}
+  jsonLd={[
+    breadcrumbSchema(Astro.site, [
+      { name: tr('breadcrumb.home'), path: routes.home[lang] },
+      { name: tr('nav.work'), path: routes.work[lang] },
+    ]),
+  ]}
+>
+  <section class="section container">
+    <SectionHead eyebrow="Portfolio" title={copy.h1} level="h1">
+      <p class="lede muted">{copy.lede}</p>
+    </SectionHead>
+
+    {
+      projects.length > 0 ? (
+        <>
+          <div class="filters" role="group" aria-label={copy.filter}>
+            <button type="button" aria-pressed="true" data-filter="all">{copy.all}</button>
+            {used.map((c) => <button type="button" aria-pressed="false" data-filter={c.id}>{c.label[lang]}</button>)}
+          </div>
+          <p class="label count" role="status" aria-live="polite">{copy.count(projects.length)}</p>
+
+          <div class="grid">
+            {projects.map((p) => <ProjectCard project={p} lang={lang} />)}
+          </div>
+        </>
+      ) : (
+        <div class="empty" data-reveal>
+          <h2>{copy.emptyTitle}</h2>
+          <p class="lede muted">{copy.emptyText}</p>
+        </div>
+      )
+    }
+
+    <p class="archive">
+      <a class="btn btn--ghost" href={site.portfolio} target="_blank" rel="noopener">{copy.archive}</a>
+      <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">Instagram {site.instagramHandle}</a>
+    </p>
+  </section>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<script is:inline define:vars={{ lang }}>
+  const buttons = document.querySelectorAll('.filters button');
+  const cards = document.querySelectorAll('.project-card');
+  const status = document.querySelector('.count');
+  const msg = (n) => (lang === 'fr' ? `${n} projets affichés` : `${n} projects shown`);
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filter;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let n = 0;
+      cards.forEach((c) => {
+        const show = f === 'all' || c.dataset.category === f;
+        c.hidden = !show;
+        if (show) n++;
+      });
+      if (status) status.textContent = msg(n);
+    }),
+  );
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block-end: var(--s-2);
+  }
+
+  .filters button {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    font: 500 0.95rem/1 var(--body);
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    cursor: pointer;
+  }
+
+  .filters button:hover {
+    border-color: var(--ink);
+  }
+
+  .filters button[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .count {
+    margin-block-end: var(--s-4);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: var(--s-4) var(--s-3);
+  }
+
+  .empty {
+    display: grid;
+    gap: var(--s-2);
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border: 1px dashed var(--line);
+  }
+
+  .archive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-block-start: var(--s-5);
+  }
+</style>
