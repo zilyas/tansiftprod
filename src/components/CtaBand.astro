@@ -7,10 +7,10 @@ interface Props {
   lang: Lang;
   title?: string;
   text?: string;
-  tone?: 'cobalt' | 'sand' | 'white';
+  tone?: 'cobalt' | 'white';
 }
 
-const { lang, title, text, tone = 'sand' } = Astro.props;
+const { lang, title, text, tone = 'white' } = Astro.props;
 const tr = t(lang);
 ---
 

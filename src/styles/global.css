@@ -1,8 +1,9 @@
 /* Tansift design system.
    Palette: Cobalt Blue 45% · Washed White 40% · Sand & Stone 15%.
    Light mode: black text on Washed White. Dark mode: Washed White text.
-   Each section picks a tone (tone-white, tone-cobalt, tone-sand); the tone
-   redefines the tokens below, so components never hard-code colours.
+   Each section picks a tone (tone-white or tone-cobalt); the tone redefines
+   the tokens below, so components never hard-code colours. Sand is an accent
+   only (buttons, labels and tags on cobalt), never a section background.
    Layout uses logical properties so an Arabic (RTL) version can reuse it. */
 
 :root {
@@ -79,21 +80,6 @@
   --teal-deep: var(--sand);
 }
 
-.tone-sand {
-  color-scheme: light;
-  --bg: var(--sand);
-  --surface: #e6d8be;
-  --surface-2: #cdb994;
-  --line: var(--stone);
-  --ink: var(--ink-black);
-  --muted: #3f3a32;
-  --accent: var(--cobalt);
-  --btn: var(--cobalt);
-  --on-btn: var(--washed);
-  --on-accent: var(--washed);
-  --teal: var(--cobalt);
-  --teal-deep: var(--cobalt);
-}
 
 @media (prefers-color-scheme: dark) {
   :root,
@@ -113,21 +99,6 @@
     --teal-deep: var(--sand);
   }
 
-  .tone-sand {
-    color-scheme: dark;
-    --bg: #3b3428;
-    --surface: #4a4234;
-    --surface-2: #574e3e;
-    --line: rgb(217 199 167 / 0.35);
-    --ink: var(--washed);
-    --muted: #e0d6c4;
-    --accent: var(--sand);
-    --btn: var(--sand);
-    --on-btn: var(--ink-black);
-    --on-accent: var(--ink-black);
-    --teal: var(--sand);
-    --teal-deep: var(--sand);
-  }
 }
 
 /* A band is a toned section painted edge to edge, even inside .container,
@@ -142,6 +113,16 @@
 .band,
 .section.band {
   padding-block: var(--s-7);
+}
+
+/* Two white sections in a row would read as one long block, so the second one
+   gets a hairline. A cobalt -> white edge already reads as a break, and the
+   :not() + combinator needs a previous sibling, so the first section on a page
+   (right under the header) never gets a line. .ends-cobalt marks an untoned
+   wrapper whose own last band is cobalt, so the edge after it already reads
+   as a break. */
+:not(.tone-cobalt):not(.ends-cobalt) + .band.tone-white {
+  border-block-start: 1px solid var(--line);
 }
 
 *,

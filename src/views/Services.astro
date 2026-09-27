@@ -51,12 +51,12 @@ const copy = {
     </SectionHead>
   </section>
 
-  <section class="section container">
+  <section class="section container ends-cobalt">
 
     <ol class="svc-list">
       {
         services.map((s, i) => (
-          <li class={`svc band tone-${['white', 'cobalt', 'white', 'sand', 'white', 'cobalt'][i]}`}>
+          <li class={`svc band tone-${['white', 'cobalt', 'white', 'cobalt', 'white', 'cobalt'][i]}`}>
             <div class="frame frame--wide">
               <img src={s.image} alt="" width="1200" height="1500" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
             </div>
