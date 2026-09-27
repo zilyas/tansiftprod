@@ -1,0 +1,54 @@
+{
+  "en": {
+    "title": "Studio | A Film, Photo & Content Crew in Essaouira | Tansift",
+    "description": "Meet Tansift Production, a film, photography and social content crew living and working in Essaouira, Morocco.",
+    "eyebrow": "The studio",
+    "h1": "A crew that lives where it films",
+    "lede": "Tansift Production is a team of directors, camera operators, photographers and editors based in Essaouira. We make films, Reels, podcasts and photos for local businesses, brands and visiting productions.",
+    "nameLabel": "The name",
+    "name": "Tansift echoes the Tensift, the river and historic region of Morocco’s Atlantic south-west, to which Essaouira belonged. We use it as a reminder of where our stories come from.",
+    "howLabel": "How we work",
+    "how": [
+      {
+        "k": "Local first",
+        "v": "We know the places, the people and the hours. It saves time on set and it shows on screen."
+      },
+      {
+        "k": "Small crews",
+        "v": "A tight team moves fast in the medina, on the beach and in small spaces."
+      },
+      {
+        "k": "Made to be posted",
+        "v": "We think about vertical, square and wide formats before we press record."
+      }
+    ],
+    "langLabel": "Languages on set",
+    "langs": "French · English · Darija · Arabic"
+  },
+  "fr": {
+    "title": "Studio | Une équipe film, photo et contenu à Essaouira | Tansift",
+    "description": "Découvrez Tansift Production, une équipe de film, photographie et contenus sociaux qui vit et travaille à Essaouira, Maroc.",
+    "eyebrow": "Le studio",
+    "h1": "Une équipe qui vit là où elle tourne",
+    "lede": "Tansift Production réunit réalisateurs, opérateurs, photographes et monteurs basés à Essaouira. Nous réalisons films, Reels, podcasts et photos pour les entreprises locales, les marques et les productions de passage.",
+    "nameLabel": "Le nom",
+    "name": "Tansift fait écho au Tensift, le fleuve et la région historique du sud-ouest atlantique marocain dont Essaouira faisait partie. Il nous rappelle d’où viennent nos histoires.",
+    "howLabel": "Notre façon de travailler",
+    "how": [
+      {
+        "k": "Le local d’abord",
+        "v": "Nous connaissons les lieux, les gens et les heures. Cela fait gagner du temps sur le plateau et cela se voit à l’écran."
+      },
+      {
+        "k": "Petites équipes",
+        "v": "Une équipe resserrée se déplace vite dans la médina, sur la plage et dans les petits espaces."
+      },
+      {
+        "k": "Pensé pour être publié",
+        "v": "Nous pensons formats vertical, carré et large avant d’appuyer sur enregistrer."
+      }
+    ],
+    "langLabel": "Langues sur le plateau",
+    "langs": "Français · anglais · darija · arabe"
+  }
+}

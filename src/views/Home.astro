@@ -15,6 +15,7 @@ import { visibleProjects } from '../data/projects';
 import { routes, path, type Lang } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import { faqSchema } from '../lib/schema';
+import { pages } from '../lib/content';
 
 interface Props {
   lang: Lang;
@@ -22,106 +23,7 @@ interface Props {
 const { lang } = Astro.props;
 const tr = t(lang);
 
-const copy = {
-  en: {
-    title: 'Video Production Company in Essaouira | Tansift Production',
-    description:
-      'Tansift Production is a video production and content studio based in Essaouira, Morocco: brand films, social media Reels, video podcasts, photography, weddings and drone.',
-    eyebrow: 'Stories from the Tensift',
-    h1: 'Video production & social content in Essaouira',
-    lede: 'We are a film, photo and content crew living in Essaouira. We make brand films, Reels, podcasts and photo shoots for businesses who want the coast to feel real, not like a postcard.',
-    ch1Label: 'Chapter 1 · The problem',
-    ch1Title: 'Everyone’s Morocco looks the same',
-    ch1Body: [
-      'Camels at sunset, a drone over the medina, a filter on top. Visitors have seen it a thousand times, and it doesn’t tell them anything about you.',
-      'We live here. We know which alley catches the first light, when the port is at its busiest, and when the wind will ruin a take. That local knowledge is what makes your content feel like yours.',
-    ],
-    ch2Label: 'Chapter 2 · The journey',
-    ch2Title: 'How a shoot runs',
-    steps: [
-      { name: 'Brief', text: 'A short call or WhatsApp exchange about your goal, audience and budget.', time: 'Day 1' },
-      { name: 'Scouting', text: 'We pick locations and hours around the light and the trade wind.', time: '2–5 days' },
-      { name: 'Shoot day', text: 'A small crew, clear shot list and morning starts when outdoors.', time: '1–3 days' },
-      { name: 'Edit & grade', text: 'Editing, sound, colour and subtitles in French, English or Darija.', time: '5–10 days' },
-      { name: 'Delivery', text: 'Every format you need: vertical, square, 16:9, web and print.', time: 'Ready to post' },
-    ],
-    ch3Label: 'Chapter 3 · What we make',
-    ch3Title: 'Films, Reels, podcasts and photos',
-    ch3Body: 'One local team for everything your brand publishes, from a month of social content to a full brand film.',
-    workLabel: 'Selected work',
-    workTitle: 'Recent productions',
-    whyLabel: 'Why a local crew',
-    why: [
-      { k: 'Based in Essaouira', v: 'No travel days or fees for shoots in the region.' },
-      { k: 'Planned around the wind', v: 'Sound, drone and portraits scheduled for calm hours.' },
-      { k: 'French · English · Darija', v: 'Scripts, subtitles and on-set direction in your language.' },
-      { k: 'Permits prepared', v: 'We plan filming and drone authorisations with you in advance.' },
-    ],
-    faq: [
-      {
-        q: 'Where is Tansift Production based?',
-        a: 'Tansift Production is based in Essaouira, on Morocco’s Atlantic coast. We shoot across the city, the coast from Sidi Kaouki to Moulay Bouzerktoune, and further afield in Morocco on request.',
-      },
-      {
-        q: 'What does Tansift Production make?',
-        a: 'We make brand films and commercials, social media content such as Reels and short videos, video podcasts, photography for brands, hotels and real estate, wedding films and drone footage.',
-      },
-      {
-        q: 'Do you work with small businesses?',
-        a: 'Yes. We make Reels, podcasts and photo shoots for local businesses as well as larger brands. A single shoot day can produce a month of social media content.',
-      },
-    ],
-  },
-  fr: {
-    title: 'Société de production vidéo à Essaouira | Tansift Production',
-    description:
-      'Tansift Production est un studio de production vidéo et de contenu basé à Essaouira, Maroc : films de marque, Reels, podcasts vidéo, photographie, mariages et drone.',
-    eyebrow: 'Histoires du Tensift',
-    h1: 'Production vidéo et contenu social à Essaouira',
-    lede: 'Nous sommes une équipe film, photo et contenu qui vit à Essaouira. Nous réalisons films de marque, Reels, podcasts et shootings photo pour les entreprises qui veulent montrer la côte telle qu’elle est, pas comme une carte postale.',
-    ch1Label: 'Chapitre 1 · Le problème',
-    ch1Title: 'Tout le monde filme le même Maroc',
-    ch1Body: [
-      'Des chameaux au coucher du soleil, un drone au-dessus de la médina, un filtre par-dessus. Les visiteurs l’ont vu mille fois, et cela ne dit rien de vous.',
-      'Nous vivons ici. Nous savons quelle ruelle reçoit la première lumière, à quelle heure le port s’anime et quand le vent gâchera une prise. C’est ce savoir local qui rend votre contenu unique.',
-    ],
-    ch2Label: 'Chapitre 2 · Le chemin',
-    ch2Title: 'Comment se déroule un tournage',
-    steps: [
-      { name: 'Brief', text: 'Un court appel ou échange WhatsApp sur votre objectif, votre public et votre budget.', time: 'Jour 1' },
-      { name: 'Repérages', text: 'Nous choisissons lieux et horaires selon la lumière et l’alizé.', time: '2 à 5 jours' },
-      { name: 'Tournage', text: 'Une petite équipe, une liste de plans claire et des départs matinaux en extérieur.', time: '1 à 3 jours' },
-      { name: 'Montage', text: 'Montage, son, étalonnage et sous-titres en français, anglais ou darija.', time: '5 à 10 jours' },
-      { name: 'Livraison', text: 'Tous les formats utiles : vertical, carré, 16:9, web et impression.', time: 'Prêt à publier' },
-    ],
-    ch3Label: 'Chapitre 3 · Ce que nous faisons',
-    ch3Title: 'Films, Reels, podcasts et photos',
-    ch3Body: 'Une seule équipe locale pour tout ce que publie votre marque, d’un mois de contenus sociaux à un film de marque complet.',
-    workLabel: 'Sélection',
-    workTitle: 'Productions récentes',
-    whyLabel: 'Pourquoi une équipe locale',
-    why: [
-      { k: 'Basés à Essaouira', v: 'Ni jours ni frais de déplacement pour les tournages de la région.' },
-      { k: 'Organisés selon le vent', v: 'Son, drone et portraits planifiés aux heures calmes.' },
-      { k: 'Français · anglais · darija', v: 'Scripts, sous-titres et direction sur le plateau dans votre langue.' },
-      { k: 'Autorisations préparées', v: 'Nous anticipons avec vous les autorisations de tournage et de drone.' },
-    ],
-    faq: [
-      {
-        q: 'Où est basée Tansift Production ?',
-        a: 'Tansift Production est basée à Essaouira, sur la côte atlantique du Maroc. Nous tournons dans toute la ville, sur la côte de Sidi Kaouki à Moulay Bouzerktoune, et ailleurs au Maroc sur demande.',
-      },
-      {
-        q: 'Que réalise Tansift Production ?',
-        a: 'Nous réalisons films de marque et publicités, contenus pour les réseaux sociaux comme les Reels et vidéos courtes, podcasts vidéo, photographie pour marques, hôtels et immobilier, films de mariage et prises de vue par drone.',
-      },
-      {
-        q: 'Travaillez-vous avec les petites entreprises ?',
-        a: 'Oui. Nous réalisons Reels, podcasts et shootings photo pour les entreprises locales comme pour des marques plus grandes. Une seule journée de tournage peut produire un mois de contenus pour les réseaux sociaux.',
-      },
-    ],
-  },
-}[lang];
+const copy = pages.home[lang];
 
 const featured = visibleProjects.slice(0, 4);
 ---
@@ -213,7 +115,7 @@ const featured = visibleProjects.slice(0, 4);
   </section>
 
   <section class="section container band tone-sand" aria-labelledby="why">
-    <SectionHead eyebrow={copy.whyLabel} title={lang === 'en' ? 'Your crew already lives here' : 'Votre équipe vit déjà ici'} id="why" />
+    <SectionHead eyebrow={copy.whyLabel} title={copy.whyTitle} id="why" />
     <dl class="why">
       {
         copy.why.map((w) => (
