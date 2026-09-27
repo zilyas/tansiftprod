@@ -20,12 +20,10 @@ npm run check    # type and template checks
 
 | Path | What it holds |
 |------|---------------|
-| `src/data/site.ts` | Contact details, Instagram, portfolio link. **Fill in WhatsApp, email and address here.** |
-| `src/data/services.ts` | The six services with their EN/FR copy, FAQ and SEO titles |
-| `src/data/projects.ts` | Work grid and case studies (currently samples; a project gets its own page when its `story` is filled in) |
-| `src/data/proof.ts` | Client logos and testimonials (sections appear once filled in) |
-| `src/data/journal.ts` | Journal guides (permits, light and wind) with sources |
-| `src/data/media.ts` | Every image and video slot on the site |
+| `content/*.json` | All editable content: contact details, page text (EN/FR), services, projects, journal, testimonials, image and video slots. **Edited through the dashboard.** |
+| `src/lib/content.ts` | Schema that checks the JSON at build time (a bad edit fails the build; the live site stays up) |
+| `src/data/` | Typed loaders over `content/` used by the pages |
+| `admin/` | The content dashboard (password + 2FA, uploads to Cloudflare R2 with WebP/WebM conversion). See [docs/DASHBOARD.md](docs/DASHBOARD.md) |
 | `src/i18n/` | Page routes per language and shared interface text |
 | `src/views/` | One file per page type, used by both languages |
 | `src/pages/` | URL routes (`/` English, `/fr/` French) |
@@ -36,11 +34,12 @@ npm run check    # type and template checks
 ## Before launch
 
 - [ ] Add real images and videos from the portfolio (see [docs/MEDIA.md](docs/MEDIA.md))
-- [ ] Replace the sample projects in `src/data/projects.ts` (or build with `PUBLIC_SHOW_SAMPLES=false` to hide them)
-- [ ] Add testimonials and client logos in `src/data/proof.ts`
-- [ ] Fill in `whatsapp`, `email`, `phone`, `streetAddress` and `foundingYear` in `src/data/site.ts`
+- [ ] Set up the content dashboard ([docs/DASHBOARD.md](docs/DASHBOARD.md))
+- [ ] Replace the sample projects in the dashboard's **Projects** page (or build with `PUBLIC_SHOW_SAMPLES=false` to hide them)
+- [ ] Add testimonials and client logos in the dashboard's **Testimonials & clients** page
+- [ ] Fill in `whatsapp`, `email`, `phone`, `streetAddress` and `foundingYear` in the dashboard's **Contact & settings** page
 - [ ] Set the real domain as the `SITE_URL` build variable in Coolify
-- [ ] Confirm the story behind the name on the Studio page (`src/views/Studio.astro`)
+- [ ] Confirm the story behind the name on the Studio page (dashboard → **Studio**)
 - [ ] Add crew names and roles in `src/views/Studio.astro`
 - [ ] Confirm whether Tansift holds a Moroccan production licence, and adjust the permit wording on the Shoot in Essaouira page
 - [ ] Create a Google Business Profile with the same name, address and phone number

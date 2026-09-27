@@ -45,15 +45,18 @@ const copy = {
     ]),
   ]}
 >
-  <section class="section container">
+  <section class="section container band tone-cobalt page-intro">
     <SectionHead eyebrow={tr('nav.services')} title={copy.h1} level="h1">
       <p class="lede muted">{copy.lede}</p>
     </SectionHead>
+  </section>
+
+  <section class="section container ends-cobalt">
 
     <ol class="svc-list">
       {
         services.map((s, i) => (
-          <li class="svc" data-reveal>
+          <li class={`svc band tone-${['white', 'cobalt', 'white', 'cobalt', 'white', 'cobalt'][i]}`}>
             <div class="frame frame--wide">
               <img src={s.image} alt="" width="1200" height="1500" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
             </div>
@@ -80,11 +83,16 @@ const copy = {
 </Base>
 
 <style>
+  /* Each service is its own stripe, alternating washed white, cobalt and sand. */
   .svc-list {
     list-style: none;
     padding: 0;
     display: grid;
-    gap: var(--s-5);
+    gap: 0;
+  }
+
+  .svc.band {
+    padding-block: var(--s-6);
   }
 
   .svc {

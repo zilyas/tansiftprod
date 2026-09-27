@@ -59,10 +59,13 @@ const used = categories.filter((c) => projects.some((p) => p.category === c.id))
     ]),
   ]}
 >
-  <section class="section container">
+  <section class="section container band tone-cobalt page-intro">
     <SectionHead eyebrow="Portfolio" title={copy.h1} level="h1">
       <p class="lede muted">{copy.lede}</p>
     </SectionHead>
+  </section>
+
+  <section class="section container">
 
     {
       projects.length > 0 ? (

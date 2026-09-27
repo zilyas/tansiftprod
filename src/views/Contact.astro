@@ -131,10 +131,13 @@ const config = {
     ]),
   ]}
 >
-  <section class="section container contact">
+  <section class="section container band tone-cobalt page-intro">
     <SectionHead eyebrow={tr('nav.cta')} title={copy.h1} level="h1">
       <p class="lede">{copy.lede}</p>
     </SectionHead>
+  </section>
+
+  <section class="section container contact">
 
     <noscript>
       <p class="noscript">{copy.noscript} <a href={site.instagram}>{site.instagramHandle}</a></p>
@@ -389,7 +392,6 @@ const config = {
       align-items: start;
     }
 
-    .contact > :global(.section-head),
     .contact > noscript {
       grid-column: 1 / -1;
     }

@@ -31,15 +31,19 @@ public/media/
 
 ## 3. Point the site at them
 
-- **Hero, chapters, team:** edit `src/data/media.ts`. Set `src` to the new path (e.g. `/media/hero-poster.webp`), set `video` / `fullReelUrl` for the hero, and remove `placeholder: true`.
-- **Services:** in `src/data/services.ts`, replace `image: placeholder('social')` with `image: '/media/services/social.webp'`.
-- **Projects:** in `src/data/projects.ts`, replace the sample entries with real ones: title (EN/FR), client, category, place and hour (e.g. `Skala du Port · 07:10`), one-line summary, `cover`, and optionally `link` to the Instagram post or video. Delete `sample: true`.
+The easiest way is the dashboard ([DASHBOARD.md](DASHBOARD.md)): **Choose / upload** in any photo or video field uploads to Cloudflare R2 and converts to WebP/WebM, or accepts a link. Files placed in `public/media/` can also be used by typing their path (e.g. `/media/hero-poster.webp`) in the field.
+
+- **Hero, chapters, team:** dashboard → **Hero & page images** (`content/media.json`).
+- **Services:** dashboard → **Services**, field *Image* (`content/services.json`).
+- **Projects:** dashboard → **Projects** (`content/projects.json`). Replace the samples with real work: title (EN/FR), client, category, place and hour (e.g. `Skala du Port · 07:10`), one-line summary, cover, and optionally a link to the Instagram post or video. Untick *Sample*.
+
+An empty image field shows a Tansift placeholder instead of a broken image.
 
 Write alt text that describes what is in the picture (people, place, action), in both languages where the field asks for it.
 
 ## Removing the preview images
 
-Once every slot points at a real file, delete `public/media/preview/` and `public/media/placeholders/`, and remove `placeholder: true` from `src/data/media.ts`.
+Once every slot points at a real file, delete `public/media/preview/` and `public/media/placeholders/`, and untick *Placeholder* on each slot in **Hero & page images**.
 
 ## Why the images were not copied automatically
 

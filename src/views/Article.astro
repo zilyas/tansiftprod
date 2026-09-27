@@ -50,7 +50,8 @@ const slug = (s: string) =>
     ]),
   ]}
 >
-  <article class="section container article">
+  <article>
+   <div class="section container band tone-cobalt article__intro">
     <nav class="crumbs label" aria-label="Breadcrumb">
       <a href={routes.home[lang]}>{tr('breadcrumb.home')}</a>
       <span aria-hidden="true">/</span>
@@ -63,7 +64,9 @@ const slug = (s: string) =>
         {tr('updated')} <time datetime={article.updated}>{fmt.format(new Date(article.updated))}</time> · Tansift Production, Essaouira
       </p>
     </header>
+   </div>
 
+   <div class="section container article">
     <aside class="summary" aria-labelledby="summary">
       <p class="label label--accent" id="summary">{copy.short}</p>
       <p class="lede">{article.summary[lang]}</p>
@@ -93,16 +96,21 @@ const slug = (s: string) =>
         {article.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
       </ul>
     </footer>
+   </div>
   </article>
 
   <CtaBand lang={lang} />
 </Base>
 
 <style>
+  .article__intro {
+    display: grid;
+    gap: var(--s-3);
+  }
+
   .article {
     display: grid;
     gap: var(--s-4);
-    padding-block-start: var(--s-5);
   }
 
   .crumbs {

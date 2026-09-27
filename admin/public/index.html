@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Tansift dashboard</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar__actions">
+          <button class="btn btn--ghost btn--small menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="sidebar">Menu</button>
+          <span class="topbar__brand">Tansift<small>Dashboard</small></span>
+        </div>
+        <div class="topbar__actions">
+          <a class="btn btn--ghost btn--small hide-sm" id="view-site" href="/" target="_blank" rel="noopener" hidden>View site</a>
+          <button class="btn btn--ghost btn--small" type="button" id="logout">Sign out</button>
+        </div>
+      </header>
+
+      <div class="shell">
+        <nav class="sidebar" id="sidebar" aria-label="Content"></nav>
+
+        <main class="main" id="main" tabindex="-1">
+          <div class="loading">Loading…</div>
+        </main>
+      </div>
+
+      <div class="publishbar" id="publishbar" hidden>
+        <span id="dirty-count" role="status"></span>
+        <div class="btn-row">
+          <button class="btn btn--ghost btn--small" type="button" id="discard">Discard changes</button>
+          <button class="btn btn--sand" type="button" id="publish">Publish</button>
+        </div>
+      </div>
+    </div>
+
+    <dialog id="media-dialog" aria-labelledby="media-dialog-title">
+      <div class="dialog__head">
+        <h2 id="media-dialog-title">Choose media</h2>
+        <button class="icon-btn" type="button" data-close aria-label="Close">✕</button>
+      </div>
+      <div class="dialog__body">
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-tab="upload">Upload</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="library">Library</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="link">Paste a link</button>
+        </div>
+
+        <section data-panel="upload" role="tabpanel">
+          <div class="drop" id="drop">
+            <p><strong>Drop a photo or video here</strong><br /><span class="help" id="limits-help"></span></p>
+            <label class="btn btn--small" for="file-input">Choose a file</label>
+            <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,video/mp4,video/quicktime,video/webm" class="visually-hidden" />
+          </div>
+          <div class="field">
+            <label for="upload-alt">Describe the picture (for accessibility and Google)</label>
+            <input id="upload-alt" type="text" maxlength="300" placeholder="e.g. Blue fishing boats in Essaouira port at sunrise" />
+          </div>
+          <label class="check"><input type="checkbox" id="upload-silent" /> Video: remove the sound (for silent background loops)</label>
+          <div id="upload-status" hidden>
+            <p class="status-line" id="upload-status-text"></p>
+            <div class="progress"><span id="upload-progress"></span></div>
+          </div>
+        </section>
+
+        <section data-panel="library" role="tabpanel" hidden>
+          <div class="grid" id="picker-grid"></div>
+        </section>
+
+        <section data-panel="link" role="tabpanel" hidden>
+          <div class="field">
+            <label for="link-input">Image or video link</label>
+            <input id="link-input" type="url" placeholder="https://…" inputmode="url" />
+            <small>Works with direct image/video links (https), YouTube and Vimeo. Linked files are not converted and stop working if the other site removes them.</small>
+          </div>
+          <p class="error" id="link-error" hidden></p>
+          <div class="btn-row"><button class="btn" type="button" id="link-use">Use this link</button></div>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog id="publish-dialog" aria-labelledby="publish-dialog-title">
+      <div class="dialog__head">
+        <h2 id="publish-dialog-title">Publish changes</h2>
+        <button class="icon-btn" type="button" data-close aria-label="Close">✕</button>
+      </div>
+      <div class="dialog__body">
+        <p id="publish-summary"></p>
+        <div class="field">
+          <label for="publish-note">Short note (optional)</label>
+          <input id="publish-note" type="text" maxlength="120" placeholder="e.g. New wedding film on the home page" />
+          <small>Saved in the change history.</small>
+        </div>
+        <p class="error" id="publish-error" hidden></p>
+        <div class="btn-row">
+          <button class="btn btn--sand" type="button" id="publish-confirm">Publish now</button>
+          <button class="btn btn--ghost" type="button" data-close>Cancel</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <script type="module" src="/assets/app.js"></script>
+  </body>
+</html>

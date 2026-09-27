@@ -7,6 +7,7 @@ import { services, serviceUrl } from '../data/services';
 import { routes, type Lang } from '../i18n/routes';
 import { t } from '../i18n/ui';
 import { breadcrumbSchema } from '../lib/schema';
+import { videoSource } from '../lib/media';
 
 interface Props {
   lang: Lang;
@@ -26,14 +27,15 @@ const copy = {
 }[lang];
 
 const title = `${project.title[lang]} — ${cat.label[lang]}, Essaouira | Tansift`;
-const video = project.video
+const film = videoSource(project.video ?? '');
+const video = film?.kind === 'file'
   ? {
       '@context': 'https://schema.org',
       '@type': 'VideoObject',
       name: project.title[lang],
       description: project.summary[lang],
       thumbnailUrl: new URL(project.cover, Astro.site).href,
-      contentUrl: new URL(project.video, Astro.site).href,
+      contentUrl: new URL(film.src, Astro.site).href,
       ...(project.year ? { uploadDate: `${project.year}-01-01` } : {}),
     }
   : null;
@@ -55,7 +57,7 @@ const video = project.video
   ]}
 >
   <article>
-    <header class="section container cs-head">
+    <header class="section container cs-head band tone-cobalt">
       <nav class="crumbs label" aria-label="Breadcrumb">
         <a href={routes.home[lang]}>{tr('breadcrumb.home')}</a>
         <span aria-hidden="true">/</span>
@@ -70,8 +72,19 @@ const video = project.video
     <div class="container">
       <figure class="frame frame--scope cs-cover">
         {
-          project.video ? (
-            <video src={project.video} poster={project.cover} controls preload="none" playsinline aria-label={project.title[lang]} />
+          film?.kind === 'embed' ? (
+            <iframe
+              src={film.src}
+              title={project.title[lang]}
+              loading="lazy"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"
+            />
+          ) : film ? (
+            <video poster={project.cover} controls preload="none" playsinline aria-label={project.title[lang]}>
+              <source src={film.src} type={film.type} />
+            </video>
           ) : (
             <img src={project.cover} alt={project.title[lang]} width="1920" height="804" fetchpriority="high" decoding="async" />
           )
@@ -142,7 +155,7 @@ const video = project.video
 
   {
     more.length > 0 && (
-      <section class="section container" aria-labelledby="more-work">
+      <section class="section container band tone-cobalt" aria-labelledby="more-work">
         <div class="section-head">
           <p class="label"><span class="label--accent">{tr('nav.work')}</span></p>
           <h2 id="more-work">{copy.more}</h2>
@@ -181,6 +194,12 @@ const video = project.video
     min-height: 32px;
     display: inline-flex;
     align-items: center;
+  }
+
+  .cs-cover iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   @media (max-width: 600px) {
