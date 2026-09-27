@@ -12,7 +12,10 @@ COPY . .
 # Public domain used for canonical URLs, sitemap, robots.txt and llms.txt.
 # In Coolify, add SITE_URL as a build variable (e.g. https://www.example.com).
 ARG SITE_URL=https://www.tansiftproduction.com
+# "false" hides the sample projects on the live site (also a build variable).
+ARG PUBLIC_SHOW_SAMPLES=true
 ENV SITE_URL=${SITE_URL} \
+    PUBLIC_SHOW_SAMPLES=${PUBLIC_SHOW_SAMPLES} \
     ASTRO_TELEMETRY_DISABLED=1
 
 RUN npm run build

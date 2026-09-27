@@ -122,7 +122,7 @@ const slug = (s: string) =>
   .crumbs a {
     color: var(--muted);
     text-decoration: none;
-    min-height: 32px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
@@ -150,10 +150,12 @@ const slug = (s: string) =>
     margin: var(--s-1) 0 0;
     padding-inline-start: 1.3rem;
     display: grid;
-    gap: 0.3rem;
   }
 
+  /* 44px tall rows so each link is easy to tap. */
   .toc a {
+    display: inline-block;
+    padding-block: 0.6rem;
     color: var(--ink);
   }
 
@@ -178,6 +180,10 @@ const slug = (s: string) =>
   .sources ul {
     padding-inline-start: 1.2rem;
     display: grid;
-    gap: 0.3rem;
+  }
+
+  .sources a {
+    display: inline-block;
+    padding-block: 0.6rem;
   }
 </style>

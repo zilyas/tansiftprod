@@ -33,6 +33,8 @@ npm run check    # type and template checks
 
 ## Before launch
 
+Step-by-step deployment of the website and the dashboard: [docs/GO-LIVE.md](docs/GO-LIVE.md).
+
 - [ ] Add real images and videos from the portfolio (see [docs/MEDIA.md](docs/MEDIA.md))
 - [ ] Set up the content dashboard ([docs/DASHBOARD.md](docs/DASHBOARD.md))
 - [ ] Replace the sample projects in the dashboard's **Projects** page (or build with `PUBLIC_SHOW_SAMPLES=false` to hide them)

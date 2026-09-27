@@ -31,6 +31,8 @@
   --s-5: 3rem;
   --s-6: 4rem;
   --s-7: 6rem;
+  /* Vertical space between sections: 56px on phones up to 96px on desktop. */
+  --space-section: clamp(3.5rem, 2rem + 6vw, 6rem);
 
   --gutter: clamp(16px, 4vw, 40px);
   --max: 1200px;
@@ -112,17 +114,32 @@
 
 .band,
 .section.band {
-  padding-block: var(--s-7);
+  padding-block: var(--space-section);
 }
 
-/* Two white sections in a row would read as one long block, so the second one
-   gets a hairline. A cobalt -> white edge already reads as a break, and the
-   :not() + combinator needs a previous sibling, so the first section on a page
-   (right under the header) never gets a line. .ends-cobalt marks an untoned
-   wrapper whose own last band is cobalt, so the edge after it already reads
-   as a break. */
-:not(.tone-cobalt):not(.ends-cobalt) + .band.tone-white {
-  border-block-start: 1px solid var(--line);
+/* Spacing between sections. Plain sections only pad their top, so two plain
+   sections in a row are one gap apart. The rules below keep every edge at one
+   gap too: no doubled space where two same-colour blocks meet, and no content
+   touching a cobalt band. */
+
+/* White band after a white band, or a plain section after a white band:
+   the space above would double, so the first block's bottom padding is enough.
+   The next section-head's own top rule marks the break. */
+.band.tone-white + .band.tone-white,
+.band.tone-white + .section:not(.band) {
+  padding-block-start: 0;
+}
+
+/* A plain section right before a cobalt band needs its own bottom space,
+   otherwise its last image or card touches the band. */
+.section:not(.band):has(+ .tone-cobalt),
+article:has(+ .tone-cobalt) > :last-child {
+  padding-block-end: var(--space-section);
+}
+
+/* A wrapper whose children are bands (Services list) adds no space of its own. */
+.section.band-stack {
+  padding-block: 0;
 }
 
 *,
@@ -235,11 +252,11 @@ a:hover {
 }
 
 .section {
-  padding-block: var(--s-7) 0;
+  padding-block: var(--space-section) 0;
 }
 
 .section:last-of-type {
-  padding-block-end: var(--s-7);
+  padding-block-end: var(--space-section);
 }
 
 .stack {
@@ -399,11 +416,13 @@ a:hover {
   inset-inline-start: 12px;
   inset-block-end: 10px;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #f5e6c8;
-  text-shadow: 0 1px 3px #000;
+  /* Dark plate so the caption stays readable on light pictures too. */
+  background: rgb(7 26 58 / 0.72);
+  padding: 3px 7px;
 }
 
 .sample-badge {
@@ -411,7 +430,7 @@ a:hover {
   inset-block-start: 10px;
   inset-inline-end: 10px;
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 3px 8px;
