@@ -1,6 +1,10 @@
 // Helpers for media references saved by the dashboard: site paths, R2 URLs
 // or external links (image files, video files, YouTube, Vimeo).
 
+// Shown when the client clears an image in the dashboard, so no slot renders broken.
+export const PLACEHOLDER_IMAGE = '/media/placeholder.webp';
+export const orPlaceholder = (src: string | undefined): string => src || PLACEHOLDER_IMAGE;
+
 export type VideoSource = { kind: 'file'; src: string; type: string } | { kind: 'embed'; src: string };
 
 /** Turns a YouTube or Vimeo link into a privacy-friendly embed URL. */

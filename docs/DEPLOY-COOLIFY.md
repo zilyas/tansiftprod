@@ -22,7 +22,7 @@ The site ships as a Docker image: Node builds the static site, then an unprivile
 
 ## After each change
 
-Enable **Automatic Deployment** (Coolify → Configuration → Git) so every push to the deploy branch rebuilds the site. Content edits in `src/data/*.ts` or new files in `public/media/` go live on the next deploy.
+Enable **Automatic Deployment** (Coolify → Configuration → Git) so every push to the deploy branch rebuilds the site. Content published from the dashboard (a commit to `content/*.json`) goes live on the next deploy. Set **Watch Paths** to `**` and `!admin/**` so dashboard code changes don't rebuild the site. The dashboard itself is a second Coolify app: see [DASHBOARD.md](DASHBOARD.md).
 
 ## Check the live site
 

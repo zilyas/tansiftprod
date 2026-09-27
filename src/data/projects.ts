@@ -1,5 +1,6 @@
 import type { Lang } from '../i18n/routes';
 import { projects as projectsData } from '../lib/content';
+import { orPlaceholder } from '../lib/media';
 
 type L<T = string> = Record<Lang, T>;
 
@@ -45,7 +46,7 @@ export interface Project {
 export const showSamples = import.meta.env.PUBLIC_SHOW_SAMPLES !== 'false';
 
 // Projects, edited in the dashboard (content/projects.json).
-export const projects: Project[] = projectsData;
+export const projects: Project[] = projectsData.map((p) => ({ ...p, cover: orPlaceholder(p.cover) }));
 
 export const visibleProjects = projects.filter((p) => showSamples || !p.sample);
 

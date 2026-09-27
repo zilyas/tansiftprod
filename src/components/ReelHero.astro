@@ -57,7 +57,7 @@ const loop = video && !embedUrl(video) ? video : '';
             data-autoplay
           >
             <source src={loop} type={videoType(loop)} />
-            {videoFallback && <source src={videoFallback} type={videoType(videoFallback)} />}
+            {videoFallback && !embedUrl(videoFallback) && <source src={videoFallback} type={videoType(videoFallback)} />}
           </video>
         ) : (
           <img

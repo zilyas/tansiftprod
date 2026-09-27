@@ -1,5 +1,6 @@
 import type { Lang } from '../i18n/routes';
 import { services as servicesData } from '../lib/content';
+import { orPlaceholder } from '../lib/media';
 
 type L<T = string> = Record<Lang, T>;
 
@@ -21,7 +22,7 @@ export interface Service {
   image: string;
 }
 
-export const services: Service[] = servicesData;
+export const services: Service[] = servicesData.map((s) => ({ ...s, image: orPlaceholder(s.image) }));
 
 export function serviceUrl(s: Service, lang: Lang): string {
   return lang === 'en' ? `/services/${s.slug.en}/` : `/fr/services/${s.slug.fr}/`;
