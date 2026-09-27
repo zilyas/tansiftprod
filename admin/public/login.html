@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Sign in · Tansift dashboard</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+  </head>
+  <body>
+    <main class="login">
+      <div class="login__card">
+        <div class="login__brand">Tansift<span>Content dashboard</span></div>
+
+        <form id="password-form" novalidate>
+          <h1>Sign in</h1>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+          </div>
+          <p class="error" role="alert" hidden></p>
+          <button class="btn" type="submit">Continue</button>
+        </form>
+
+        <form id="code-form" novalidate hidden>
+          <h1>Enter your code</h1>
+          <p class="help" id="code-help">Open your authenticator app and type the 6-digit code for Tansift.</p>
+          <div class="field">
+            <label for="code" class="visually-hidden">6-digit code</label>
+            <input
+              id="code"
+              name="code"
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              pattern="[0-9]{6}"
+              maxlength="6"
+              aria-describedby="code-help"
+              required
+            />
+          </div>
+          <p class="error" role="alert" hidden></p>
+          <button class="btn" type="submit">Sign in</button>
+          <button class="link-btn" type="button" id="use-recovery">Lost your phone? Use a recovery code</button>
+        </form>
+
+        <form id="recovery-form" novalidate hidden>
+          <h1>Use a recovery code</h1>
+          <p class="help">Each recovery code works once. After using one, ask your developer to set up a new authenticator.</p>
+          <div class="field">
+            <label for="recovery">Recovery code</label>
+            <input id="recovery" name="recovery" type="text" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX" required />
+          </div>
+          <p class="error" role="alert" hidden></p>
+          <button class="btn" type="submit">Sign in</button>
+          <button class="link-btn" type="button" id="use-code">Back to the 6-digit code</button>
+        </form>
+      </div>
+    </main>
+    <script type="module" src="/assets/login.js"></script>
+  </body>
+</html>

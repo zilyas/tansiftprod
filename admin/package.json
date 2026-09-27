@@ -1,0 +1,25 @@
+{
+  "name": "tansift-admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Content dashboard for the Tansift website: edit JSON content, convert media to WebP/WebM on Cloudflare R2, publish through GitHub. No database.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "setup": "node scripts/setup.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1141.0",
+    "@aws-sdk/lib-storage": "^3.1141.0",
+    "@hono/node-server": "^2.1.1",
+    "file-type": "^22.1.1",
+    "hono": "^4.13.9",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.4"
+  }
+}
