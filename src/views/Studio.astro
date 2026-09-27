@@ -72,10 +72,13 @@ const crew: { name: string; role: Record<Lang, string>; photo?: string }[] = [];
     ]),
   ]}
 >
-  <section class="section container">
+  <section class="section container band tone-cobalt page-intro">
     <SectionHead eyebrow={copy.eyebrow} title={copy.h1} level="h1">
       <p class="lede">{copy.lede}</p>
     </SectionHead>
+  </section>
+
+  <section class="section container">
     <div data-reveal>
       <Media
         lang={lang}
@@ -92,7 +95,7 @@ const crew: { name: string; role: Record<Lang, string>; photo?: string }[] = [];
     </div>
   </section>
 
-  <section class="section container" aria-labelledby="name">
+  <section class="section container band tone-cobalt" aria-labelledby="name">
     <div class="name-block" data-reveal>
       <p class="label label--accent">{copy.nameLabel}</p>
       <h2 id="name">Tansift</h2>

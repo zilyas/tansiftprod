@@ -7,13 +7,14 @@ interface Props {
   lang: Lang;
   title?: string;
   text?: string;
+  tone?: 'cobalt' | 'sand' | 'white';
 }
 
-const { lang, title, text } = Astro.props;
+const { lang, title, text, tone = 'sand' } = Astro.props;
 const tr = t(lang);
 ---
 
-<section class="cta-band container" aria-labelledby="cta-band-title" data-reveal>
+<section class={`cta-band container band tone-${tone}`} aria-labelledby="cta-band-title">
   <div class="cta-band__inner">
     <p class="label label--accent">{lang === 'en' ? 'Closing scene' : 'Scène finale'}</p>
     <h2 id="cta-band-title">{title ?? tr('cta.brief')}</h2>
@@ -31,6 +32,10 @@ const tr = t(lang);
 <style>
   .cta-band {
     margin-block-start: var(--s-7);
+  }
+
+  .cta-band__inner {
+    border-color: var(--line);
   }
 
   .cta-band__inner {

@@ -150,7 +150,7 @@ const wind = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0];
     ]),
   ]}
 >
-  <section class="section container">
+  <section class="section container band tone-cobalt page-intro">
     <SectionHead eyebrow={copy.eyebrow} kicker="31.51° N · 9.77° W" title={copy.h1} level="h1">
       <p class="lede">{copy.lede}</p>
       <div class="btn-row">
@@ -188,7 +188,7 @@ const wind = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0];
     </ol>
   </section>
 
-  <section class="section container" aria-labelledby="wind">
+  <section class="section container band tone-cobalt" aria-labelledby="wind">
     <SectionHead eyebrow={copy.windLabel} title={copy.windTitle} id="wind">
       <p class="muted">{copy.windNote}</p>
     </SectionHead>
@@ -236,7 +236,7 @@ const wind = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0];
 
   <Faq title={tr('faq.title')} items={copy.faq} />
 
-  <CtaBand lang={lang} />
+  <CtaBand lang={lang} tone="cobalt" />
 </Base>
 
 <style>
@@ -311,7 +311,7 @@ const wind = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0];
 
   .w2 {
     background: var(--teal-deep);
-    color: #f5e6c8;
+    color: var(--washed);
   }
 
   .legend {

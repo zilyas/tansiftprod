@@ -156,7 +156,7 @@ const featured = visibleProjects.slice(0, 4);
   </section>
 
   <!-- Chapter 2 -->
-  <section class="section container" aria-labelledby="ch2">
+  <section class="section container band tone-cobalt" aria-labelledby="ch2">
     <SectionHead eyebrow={copy.ch2Label} title={copy.ch2Title} id="ch2" />
     <div class="journey-frame" data-reveal>
       <Media
@@ -212,7 +212,7 @@ const featured = visibleProjects.slice(0, 4);
     <a class="text-link" href={path('work', lang)}>→ {tr('cta.work')}</a>
   </section>
 
-  <section class="section container" aria-labelledby="why">
+  <section class="section container band tone-sand" aria-labelledby="why">
     <SectionHead eyebrow={copy.whyLabel} title={lang === 'en' ? 'Your crew already lives here' : 'Votre équipe vit déjà ici'} id="why" />
     <dl class="why">
       {
@@ -230,7 +230,7 @@ const featured = visibleProjects.slice(0, 4);
 
   <Faq title={tr('faq.title')} items={copy.faq} />
 
-  <CtaBand lang={lang} />
+  <CtaBand lang={lang} tone="cobalt" />
 </Base>
 
 <style>

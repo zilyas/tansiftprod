@@ -5,3 +5,7 @@ dist/
 *.log
 .env
 .env.*
+
+# Research working files
+research_notes/
+reports/
